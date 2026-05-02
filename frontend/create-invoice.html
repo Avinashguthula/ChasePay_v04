@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChasePay - Create Invoice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex">
+    <!-- Sidebar (Same as dashboard) -->
+    <aside class="w-64 bg-white border-r border-slate-200 h-screen sticky top-0">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold text-blue-600">ChasePay</h1>
+        </div>
+        <nav class="mt-6 px-4">
+            <a href="dashboard.html" class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
+                <span class="mr-3">📊</span> Dashboard
+            </a>
+            <a href="invoices.html" class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
+                <span class="mr-3">📄</span> Invoices
+            </a>
+            <a href="create-invoice.html" class="flex items-center px-4 py-2 text-slate-700 bg-slate-100 rounded-lg mb-2">
+                <span class="mr-3">➕</span> Create Invoice
+            </a>
+            <a href="settings.html" class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
+                <span class="mr-3">⚙️</span> Settings
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-8">
+        <div class="max-w-2xl mx-auto">
+            <header class="mb-8">
+                <h2 class="text-2xl font-bold text-slate-900">Create New Invoice</h2>
+                <p class="text-slate-500">Fill in the details to send a new invoice.</p>
+            </header>
+
+            <form id="invoice-form" class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Client Name</label>
+                        <input type="text" id="client_name" required class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Client Email</label>
+                        <input type="email" id="client_email" required class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Amount</label>
+                        <input type="number" id="amount" step="0.01" required class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Currency</label>
+                        <select id="currency" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="USD">USD</option>
+                            <option value="INR">INR</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Due Date</label>
+                        <input type="date" id="due_date" required class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="mt-8 flex space-x-4">
+                    <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Save & Send Invoice</button>
+                    <button type="button" onclick="window.location.href='dashboard.html'" class="text-slate-600 font-medium px-6 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 transition duration-200">Cancel</button>
+                </div>
+            </form>
+            <div id="status-msg" class="mt-4 hidden p-4 rounded-lg"></div>
+        </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        document.getElementById('invoice-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Creating...';
+
+            const payload = {
+                client_name: document.getElementById('client_name').value,
+                client_email: document.getElementById('client_email').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                currency: document.getElementById('currency').value,
+                due_date: document.getElementById('due_date').value
+            };
+
+            const res = await fetchWithAuth('/invoices/', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+
+            const msg = document.getElementById('status-msg');
+            if (res && res.id) {
+                msg.textContent = 'Invoice created successfully!';
+                msg.className = 'mt-4 p-4 rounded-lg bg-green-100 text-green-700';
+                msg.classList.remove('hidden');
+                setTimeout(() => window.location.href = 'invoices.html', 1500);
+            } else {
+                msg.textContent = res?.detail || 'Failed to create invoice.';
+                msg.className = 'mt-4 p-4 rounded-lg bg-red-100 text-red-700';
+                msg.classList.remove('hidden');
+                btn.disabled = false;
+                btn.textContent = 'Save & Send Invoice';
+            }
+        });
+    </script>
+</body>
+</html>
