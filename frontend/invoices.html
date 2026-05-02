@@ -44,6 +44,7 @@
                 <thead class="bg-slate-50 text-slate-500 text-sm uppercase">
                     <tr>
                         <th class="px-6 py-4 font-semibold">Client</th>
+                        <th class="px-6 py-4 font-semibold">Description</th>
                         <th class="px-6 py-4 font-semibold">Amount</th>
                         <th class="px-6 py-4 font-semibold">Due Date</th>
                         <th class="px-6 py-4 font-semibold">Status</th>
@@ -79,6 +80,10 @@
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-slate-700 mb-1">Due Date</label>
                         <input type="date" id="edit-due-date" class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+                        <textarea id="edit-description" rows="2" class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-slate-700 mb-1">Status</label>
@@ -119,6 +124,9 @@
                             <p class="font-semibold text-slate-900">${inv.client_name}</p>
                             <p class="text-xs text-slate-500">${inv.client_email}</p>
                         </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm text-slate-600 truncate max-w-[200px]" title="${inv.description || ''}">${inv.description || '-'}</p>
+                        </td>
                         <td class="px-6 py-4 font-medium text-slate-900">${inv.currency} ${inv.amount}</td>
                         <td class="px-6 py-4 text-slate-600 text-sm">${new Date(inv.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
                         <td class="px-6 py-4">
@@ -154,6 +162,7 @@
                 document.getElementById('edit-amount').value = inv.amount;
                 document.getElementById('edit-due-date').value = inv.due_date;
                 document.getElementById('edit-status').value = inv.status;
+                document.getElementById('edit-description').value = inv.description || '';
                 toggleModal();
             }
         }
@@ -164,7 +173,8 @@
             const payload = {
                 amount: parseFloat(document.getElementById('edit-amount').value),
                 due_date: document.getElementById('edit-due-date').value,
-                status: document.getElementById('edit-status').value
+                status: document.getElementById('edit-status').value,
+                description: document.getElementById('edit-description').value
             };
 
             const res = await fetchWithAuth(`/invoices/${id}`, {

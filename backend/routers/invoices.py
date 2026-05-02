@@ -14,9 +14,13 @@ class InvoiceCreate(BaseModel):
     amount: float
     currency: str = "USD"
     due_date: date
+    description: Optional[str] = None
 
 class InvoiceUpdate(BaseModel):
-    status: str
+    status: Optional[str] = None
+    amount: Optional[float] = None
+    due_date: Optional[date] = None
+    description: Optional[str] = None
 
 @router.get("/stats/summary")
 async def get_invoice_stats(user: dict = Depends(get_current_user)):
@@ -87,6 +91,7 @@ async def create_invoice(invoice: InvoiceCreate, user: dict = Depends(get_curren
         "amount": invoice.amount,
         "currency": invoice.currency,
         "due_date": str(invoice.due_date),
+        "description": invoice.description,
         "status": "unpaid"
     }
     response = supabase.table("invoices").insert(data).execute()
@@ -106,6 +111,7 @@ async def update_invoice(invoice_id: str, update: InvoiceUpdate, user: dict = De
     if update.status is not None: update_data["status"] = update.status
     if update.amount is not None: update_data["amount"] = update.amount
     if update.due_date is not None: update_data["due_date"] = str(update.due_date)
+    if update.description is not None: update_data["description"] = update.description
     
     if not update_data:
         raise HTTPException(status_code=400, detail="No fields to update")

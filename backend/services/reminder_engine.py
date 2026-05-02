@@ -31,7 +31,8 @@ async def process_overdue_invoices():
                     inv["amount"], 
                     inv["currency"], 
                     days_overdue, 
-                    reminder_type
+                    reminder_type,
+                    inv.get("description")
                 )
                 
                 # Split subject and body (Gemini output format varies, we'll do a simple split or use regex)
