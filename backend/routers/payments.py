@@ -10,6 +10,10 @@ router = APIRouter(prefix="/payments", tags=["Payments"])
 
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
+@router.get("/razorpay-key")
+async def get_razorpay_key():
+    return {"key": settings.RAZORPAY_KEY_ID}
+
 @router.post("/create-order")
 async def create_order(plan: str, user: dict = Depends(get_current_user)):
     amount_map = {
@@ -23,7 +27,7 @@ async def create_order(plan: str, user: dict = Depends(get_current_user)):
     order_data = {
         "amount": amount_map[plan] * 80, # Assume 80 INR per USD for Razorpay INR accounts
         "currency": "INR",
-        "receipt": f"receipt_{user['id']}_{plan}",
+        "receipt": f"rcpt_{user['id'][-20:]}_{plan}", # Shortened to stay under 40 chars
         "notes": {
             "user_id": user["id"],
             "plan": plan
@@ -59,6 +63,27 @@ async def razorpay_webhook(request: Request):
         
         if user_id and plan:
             supabase_admin.table("users").update({"plan": plan}).eq("id", user_id).execute()
-            print(f"User {user_id} upgraded to {plan}")
+            print(f"User {user_id} upgraded to {plan} via webhook")
             
     return {"status": "ok"}
+
+@router.post("/verify-payment")
+async def verify_payment(data: dict, user: dict = Depends(get_current_user)):
+    # Data contains razorpay_payment_id, razorpay_order_id, razorpay_signature
+    try:
+        client.utility.verify_payment_signature(data)
+        
+        # If verification passes, update the user plan immediately
+        # We need to know which plan it was. We can fetch the order from Razorpay.
+        order_id = data.get("razorpay_order_id")
+        order = client.order.fetch(order_id)
+        plan = order.get("notes", {}).get("plan")
+        
+        if plan:
+            supabase_admin.table("users").update({"plan": plan}).eq("id", user["id"]).execute()
+            return {"status": "success", "plan": plan}
+        else:
+            return {"status": "error", "message": "Plan not found in order notes"}
+            
+    except Exception as e:
+        return {"status": "error", "message": str(e)}

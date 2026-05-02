@@ -84,32 +84,66 @@
             if (user) {
                 document.getElementById('user-email').textContent = user.email;
                 document.getElementById('user-plan').textContent = user.plan;
+                
+                // Highlight current plan if needed
+                const planElements = {
+                    'pro': document.querySelector('[onclick="upgradePlan(\'pro\')"]'),
+                    'agency': document.querySelector('[onclick="upgradePlan(\'agency\')"]')
+                };
+                
+                if (planElements[user.plan]) {
+                    planElements[user.plan].classList.add('ring-2', 'ring-blue-500', 'bg-blue-50');
+                    planElements[user.plan].onclick = null;
+                    planElements[user.plan].querySelector('.text-blue-600').textContent = 'Current';
+                }
             }
         }
 
         async function upgradePlan(plan) {
-            const order = await fetchWithAuth(`/payments/create-order?plan=${plan}`, { method: 'POST' });
-            if (order) {
-                const options = {
-                    "key": "YOUR_RAZORPAY_KEY_ID", // Replace with real key
-                    "amount": order.amount,
-                    "currency": order.currency,
-                    "name": "ChasePay",
-                    "description": `${plan.toUpperCase()} Plan Subscription`,
-                    "order_id": order.id,
-                    "handler": function (response) {
-                        alert('Payment Successful! Your plan will be updated shortly.');
-                        loadProfile();
-                    },
-                    "prefill": {
-                        "email": document.getElementById('user-email').textContent
-                    },
-                    "theme": {
-                        "color": "#2563eb"
-                    }
-                };
-                const rzp = new Razorpay(options);
-                rzp.open();
+            try {
+                // Fetch public key from backend
+                const keyData = await fetchWithAuth('/payments/razorpay-key');
+                if (!keyData || !keyData.key) {
+                    alert('Error: Could not retrieve payment configuration.');
+                    return;
+                }
+
+                const order = await fetchWithAuth(`/payments/create-order?plan=${plan}`, { method: 'POST' });
+                if (order) {
+                    const options = {
+                        "key": keyData.key,
+                        "amount": order.amount,
+                        "currency": order.currency,
+                        "name": "ChasePay",
+                        "description": `${plan.charAt(0).toUpperCase() + plan.slice(1)} Plan Subscription`,
+                        "order_id": order.id,
+                        "handler": async function (response) {
+                            // Verify payment with backend
+                            const verification = await fetchWithAuth('/payments/verify-payment', {
+                                method: 'POST',
+                                body: JSON.stringify(response)
+                            });
+
+                            if (verification && verification.status === 'success') {
+                                alert(`Payment Successful! Your plan has been upgraded to ${verification.plan.toUpperCase()}.`);
+                                loadProfile();
+                            } else {
+                                alert('Payment verification failed. Please contact support if the amount was deducted.');
+                            }
+                        },
+                        "prefill": {
+                            "email": document.getElementById('user-email').textContent
+                        },
+                        "theme": {
+                            "color": "#2563eb"
+                        }
+                    };
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                }
+            } catch (error) {
+                console.error('Upgrade failed:', error);
+                alert('Failed to initiate upgrade. Please try again.');
             }
         }
         loadProfile();

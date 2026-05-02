@@ -15,10 +15,15 @@ async def get_current_user(auth: HTTPAuthorizationCredentials = Security(securit
         if not user:
             raise HTTPException(status_code=401, detail="Invalid token")
         
+        # Fetch the user profile from public.users to get the plan
+        from backend.db.supabase import supabase_admin
+        profile = supabase_admin.table("users").select("*").eq("id", user.id).single().execute()
+        
         return {
             "id": user.id,
             "email": user.email,
-            "token": token
+            "token": token,
+            "plan": profile.data.get("plan", "free") if profile.data else "free"
         }
     except Exception as e:
         print(f"Auth error: {str(e)}")

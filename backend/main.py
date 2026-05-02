@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routers import invoices, clients, payments, google_oauth, auth
+from backend.routers import invoices, clients, payments, google_oauth, auth, users
 from backend.scheduler.main import start_scheduler
 from backend.core.config import settings
 
@@ -16,6 +16,7 @@ app.add_middleware(
 
 # Include routers with /api prefix
 app.include_router(auth.router, prefix="/api")
+app.include_router(users.router, prefix="/api")
 app.include_router(invoices.router, prefix="/api")
 app.include_router(clients.router, prefix="/api")
 app.include_router(payments.router, prefix="/api")
