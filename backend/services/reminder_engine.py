@@ -44,9 +44,15 @@ async def process_overdue_invoices():
                 success = await send_email_unified(inv["user_id"], inv["client_email"], subject, body)
                 
                 if success:
-                    # Log reminder
+                    # Log reminder in reminders table
                     supabase_admin.table("reminders").insert({
                         "invoice_id": inv["id"],
                         "type": reminder_type
                     }).execute()
+                    
+                    # Update last_reminder in invoices table
+                    supabase_admin.table("invoices").update({
+                        "last_reminder": reminder_type
+                    }).eq("id", inv["id"]).execute()
+                    
                     print(f"Sent {reminder_type} reminder for invoice {inv['id']}")

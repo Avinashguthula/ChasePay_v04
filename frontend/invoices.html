@@ -64,6 +64,7 @@
                         <th class="px-6 py-4 font-semibold">Amount</th>
                         <th class="px-6 py-4 font-semibold">Due Date</th>
                         <th class="px-6 py-4 font-semibold">Status</th>
+                        <th class="px-6 py-4 font-semibold text-center">Last Reminder</th>
                         <th class="px-6 py-4 font-semibold text-right">Actions</th>
                     </tr>
                 </thead>
@@ -137,6 +138,33 @@
             </div>
         </div>
     </div>
+    <!-- View Modal -->
+    <div id="view-modal"
+        class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50 transition-opacity duration-300">
+        <div class="modal-overlay absolute w-full h-full bg-slate-900/60 backdrop-blur-sm" onclick="toggleViewModal()"></div>
+        <div class="modal-container bg-white w-11/12 md:max-w-lg mx-auto rounded-3xl shadow-2xl z-50 overflow-y-auto transform transition-all">
+            <div class="modal-content py-8 text-left px-10">
+                <div class="flex justify-between items-center pb-6 border-b border-slate-100 mb-6">
+                    <p class="text-2xl font-bold text-slate-900">Invoice Details</p>
+                    <div class="modal-close cursor-pointer p-2 hover:bg-slate-100 rounded-full transition" onclick="toggleViewModal()">
+                        <svg class="fill-current text-slate-500" xmlns="http://www.w3.org/2000/svg" width="20"
+                            height="20" viewBox="0 0 18 18">
+                            <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+                <div id="view-details" class="space-y-6">
+                    <!-- Loaded via JS -->
+                </div>
+                <div class="flex justify-end pt-8 border-t border-slate-100 mt-8">
+                    <button type="button" onclick="toggleViewModal()"
+                        class="px-6 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-xl hover:bg-slate-200 transition">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="js/auth.js"></script>
     <script src="js/api.js"></script>
@@ -145,6 +173,13 @@
 
         function toggleModal() {
             const modal = document.getElementById('edit-modal');
+            modal.classList.toggle('opacity-0');
+            modal.classList.toggle('pointer-events-none');
+            document.body.classList.toggle('modal-active');
+        }
+
+        function toggleViewModal() {
+            const modal = document.getElementById('view-modal');
             modal.classList.toggle('opacity-0');
             modal.classList.toggle('pointer-events-none');
             document.body.classList.toggle('modal-active');
@@ -171,7 +206,17 @@
                                 ${inv.status.toUpperCase()}
                             </span>
                         </td>
+                        <td class="px-6 py-4 text-center">
+                            ${inv.last_reminder ? `
+                                <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px] font-bold uppercase border border-blue-100">
+                                    ${inv.last_reminder} Sent
+                                </span>
+                            ` : `
+                                <span class="text-slate-300 text-[10px] italic">No reminders yet</span>
+                            `}
+                        </td>
                         <td class="px-6 py-4 text-right space-x-3">
+                            <button onclick="viewInvoice('${inv.id}')" class="text-xs font-bold text-slate-600 hover:text-slate-800 transition uppercase">View</button>
                             <button onclick="toggleStatus('${inv.id}', '${inv.status}')" class="text-xs font-bold ${inv.status === 'unpaid' ? 'text-green-600 hover:text-green-800' : 'text-orange-600 hover:text-orange-800'} transition uppercase">
                                 Mark ${inv.status === 'unpaid' ? 'Paid' : 'Unpaid'}
                             </button>
@@ -190,6 +235,67 @@
                 body: JSON.stringify({ status: newStatus })
             });
             if (res) loadInvoices();
+        }
+
+        function viewInvoice(id) {
+            const inv = currentInvoices.find(i => i.id === id);
+            if (inv) {
+                const details = document.getElementById('view-details');
+                details.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Client</p>
+                            <p class="text-xl font-bold text-slate-900">${inv.client_name}</p>
+                            <p class="text-sm text-slate-500">${inv.client_email}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide ${inv.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}">
+                                <span class="w-2 h-2 rounded-full mr-2 ${inv.status === 'paid' ? 'bg-green-500' : 'bg-orange-500'}"></span>
+                                ${inv.status.toUpperCase()}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50/50 rounded-2xl p-6 border border-blue-100/50">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <p class="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-1">Total Amount</p>
+                                <p class="text-3xl font-black text-blue-600">${inv.currency} ${inv.amount.toLocaleString()}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-1">Due Date</p>
+                                <p class="text-lg font-bold text-slate-900">${new Date(inv.due_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Description</p>
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                            <p class="text-slate-700 leading-relaxed">${inv.description || '<span class="text-slate-400 italic">No description provided</span>'}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6 py-4">
+                        <div class="flex items-center p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 text-xl">🔔</div>
+                            <div>
+                                <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Last Reminder</p>
+                                <p class="text-sm font-bold text-slate-900">${inv.last_reminder ? inv.last_reminder + ' Sent' : 'None yet'}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center mr-3 text-lg">🆔</div>
+                            <div class="overflow-hidden">
+                                <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Invoice ID</p>
+                                <p class="text-[10px] font-mono text-slate-500 truncate" title="${inv.id}">${inv.id}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                toggleViewModal();
+            }
         }
 
         function openEditModal(id) {
