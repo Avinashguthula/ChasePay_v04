@@ -21,6 +21,8 @@ class InvoiceUpdate(BaseModel):
     amount: Optional[float] = None
     due_date: Optional[date] = None
     description: Optional[str] = None
+    client_name: Optional[str] = None
+    client_email: Optional[str] = None
 
 @router.get("/stats/summary")
 async def get_invoice_stats(user: dict = Depends(get_current_user)):
@@ -112,6 +114,8 @@ async def update_invoice(invoice_id: str, update: InvoiceUpdate, user: dict = De
     if update.amount is not None: update_data["amount"] = update.amount
     if update.due_date is not None: update_data["due_date"] = str(update.due_date)
     if update.description is not None: update_data["description"] = update.description
+    if update.client_name is not None: update_data["client_name"] = update.client_name
+    if update.client_email is not None: update_data["client_email"] = update.client_email
     
     if not update_data:
         raise HTTPException(status_code=400, detail="No fields to update")
@@ -124,3 +128,10 @@ async def delete_invoice(invoice_id: str, user: dict = Depends(get_current_user)
     supabase = get_supabase_client(user["token"])
     supabase.table("invoices").delete().eq("id", invoice_id).execute()
     return {"message": "Invoice deleted"}
+
+@router.post("/trigger-reminders-now")
+async def trigger_reminders_now():
+    """TEST ONLY: Manually trigger the reminder engine immediately."""
+    from backend.services.reminder_engine import process_overdue_invoices
+    await process_overdue_invoices()
+    return {"message": "Reminder engine triggered successfully"}

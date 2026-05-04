@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,27 +8,40 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .modal { transition: opacity 0.25s ease; }
-        body.modal-active { overflow-x: hidden; overflow-y: visible !important; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+
+        body.modal-active {
+            overflow-x: hidden;
+            overflow-y: visible !important;
+        }
     </style>
 </head>
+
 <body class="bg-slate-50 min-h-screen flex">
     <aside class="w-64 bg-white border-r border-slate-200 h-screen sticky top-0">
         <div class="p-6">
             <h1 class="text-2xl font-bold text-blue-600">ChasePay</h1>
         </div>
         <nav class="mt-6 px-4">
-            <a href="dashboard.html" class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
+            <a href="dashboard.html"
+                class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
                 <span class="mr-3">📊</span> Dashboard
             </a>
             <a href="invoices.html" class="flex items-center px-4 py-2 text-slate-700 bg-slate-100 rounded-lg mb-2">
                 <span class="mr-3">📄</span> Invoices
             </a>
-            <a href="create-invoice.html" class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
+            <a href="create-invoice.html"
+                class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
                 <span class="mr-3">➕</span> Create Invoice
             </a>
-            <a href="settings.html" class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
+            <a href="settings.html"
+                class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
                 <span class="mr-3">⚙️</span> Settings
             </a>
         </nav>
@@ -36,7 +50,9 @@
     <main class="flex-1 p-8">
         <header class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-bold text-slate-900">All Invoices</h2>
-            <button onclick="window.location.href='create-invoice.html'" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-lg shadow-blue-200">New Invoice</button>
+            <button onclick="window.location.href='create-invoice.html'"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-lg shadow-blue-200">New
+                Invoice</button>
         </header>
 
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
@@ -59,42 +75,63 @@
     </main>
 
     <!-- Edit Modal -->
-    <div id="edit-modal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
+    <div id="edit-modal"
+        class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
         <div class="modal-overlay absolute w-full h-full bg-slate-900 opacity-50"></div>
         <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-2xl shadow-2xl z-50 overflow-y-auto">
             <div class="modal-content py-6 text-left px-8">
                 <div class="flex justify-between items-center pb-4">
                     <p class="text-xl font-bold text-slate-900">Edit Invoice</p>
                     <div class="modal-close cursor-pointer z-50" onclick="toggleModal()">
-                        <svg class="fill-current text-slate-500" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                        <svg class="fill-current text-slate-500" xmlns="http://www.w3.org/2000/svg" width="18"
+                            height="18" viewBox="0 0 18 18">
+                            <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
+                            </path>
                         </svg>
                     </div>
                 </div>
                 <form id="edit-form">
                     <input type="hidden" id="edit-id">
                     <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Client Name</label>
+                        <input type="text" id="edit-client-name"
+                            class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Client Email</label>
+                        <input type="email" id="edit-client-email"
+                            class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4">
                         <label class="block text-sm font-medium text-slate-700 mb-1">Amount</label>
-                        <input type="number" id="edit-amount" step="0.01" class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="number" id="edit-amount" step="0.01"
+                            class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-slate-700 mb-1">Due Date</label>
-                        <input type="date" id="edit-due-date" class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="date" id="edit-due-date"
+                            class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
-                        <textarea id="edit-description" rows="2" class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <textarea id="edit-description" rows="2"
+                            class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-slate-700 mb-1">Status</label>
-                        <select id="edit-status" class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="edit-status"
+                            class="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="unpaid">Unpaid</option>
                             <option value="paid">Paid</option>
                         </select>
                     </div>
                     <div class="flex justify-end pt-2">
-                        <button type="button" onclick="toggleModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg mr-2 hover:bg-slate-200 transition">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Save Changes</button>
+                        <button type="button" onclick="toggleModal()"
+                            class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg mr-2 hover:bg-slate-200 transition">Cancel</button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Save
+                            Changes</button>
                     </div>
                 </form>
             </div>
@@ -163,6 +200,8 @@
                 document.getElementById('edit-due-date').value = inv.due_date;
                 document.getElementById('edit-status').value = inv.status;
                 document.getElementById('edit-description').value = inv.description || '';
+                document.getElementById('edit-client-name').value = inv.client_name;
+                document.getElementById('edit-client-email').value = inv.client_email;
                 toggleModal();
             }
         }
@@ -174,7 +213,9 @@
                 amount: parseFloat(document.getElementById('edit-amount').value),
                 due_date: document.getElementById('edit-due-date').value,
                 status: document.getElementById('edit-status').value,
-                description: document.getElementById('edit-description').value
+                description: document.getElementById('edit-description').value,
+                client_name: document.getElementById('edit-client-name').value,
+                client_email: document.getElementById('edit-client-email').value
             };
 
             const res = await fetchWithAuth(`/invoices/${id}`, {
@@ -198,4 +239,5 @@
         loadInvoices();
     </script>
 </body>
+
 </html>
