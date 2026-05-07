@@ -72,6 +72,26 @@
                         </div>
                     </div>
                 </div>
+                <!-- Integrations Section -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4">Integrations</h3>
+                    <div class="flex items-center justify-between p-4 border border-slate-200 rounded-xl">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-4 text-xl">
+                                📧
+                            </div>
+                            <div>
+                                <p class="font-bold text-slate-900">Gmail Connection</p>
+                                <p class="text-xs text-slate-500">Send invoice emails directly from your Gmail account.</p>
+                            </div>
+                        </div>
+                        <div id="gmail-status-container">
+                            <button id="connect-gmail-btn" onclick="connectGmail()" class="px-4 py-2 bg-slate-900 text-white text-sm font-semibold rounded-lg hover:bg-slate-800 transition">
+                                Connect Gmail
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -85,6 +105,21 @@
                 document.getElementById('user-email').textContent = user.email;
                 document.getElementById('user-plan').textContent = user.plan;
                 
+                // Handle Gmail status
+                const gmailContainer = document.getElementById('gmail-status-container');
+                if (user.gmail_connected) {
+                    gmailContainer.innerHTML = `
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            CONNECTED
+                        </span>
+                    `;
+                } else if (user.plan === 'free') {
+                    document.getElementById('connect-gmail-btn').disabled = true;
+                    document.getElementById('connect-gmail-btn').classList.add('opacity-50', 'cursor-not-allowed');
+                    document.getElementById('connect-gmail-btn').title = 'Upgrade to Pro to connect Gmail';
+                }
+                
                 // Highlight current plan if needed
                 const planElements = {
                     'pro': document.querySelector('[onclick="upgradePlan(\'pro\')"]'),
@@ -96,6 +131,18 @@
                     planElements[user.plan].onclick = null;
                     planElements[user.plan].querySelector('.text-blue-600').textContent = 'Current';
                 }
+            }
+        }
+
+        async function connectGmail() {
+            try {
+                const response = await fetchWithAuth('/connect/google/login');
+                if (response && response.url) {
+                    window.location.href = response.url;
+                }
+            } catch (error) {
+                console.error('Failed to start Gmail connection:', error);
+                alert('Failed to connect to Google. Please try again.');
             }
         }
 
@@ -146,6 +193,14 @@
                 alert('Failed to initiate upgrade. Please try again.');
             }
         }
+        // Check for connection success in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('connected') === 'true') {
+            alert('Gmail account connected successfully!');
+            // Clean up URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
         loadProfile();
     </script>
 </body>

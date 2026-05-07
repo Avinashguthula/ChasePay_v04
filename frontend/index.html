@@ -338,7 +338,7 @@
           <div class="form-group">
             <label class="form-label">Password</label>
             <div class="input-wrap">
-              <input type="password" class="form-input" id="login-password" placeholder="••••••••">
+              <input type="password" class="form-input" id="login-password" placeholder="Enter your password">
               <button class="input-eye" onclick="togglePw('login-password', this)">👁</button>
             </div>
           </div>
@@ -496,7 +496,8 @@
           msg.className = 'error';
         }
       } catch (error) {
-        msg.textContent = 'Server error. Please try again.';
+        console.error('Login error:', error);
+        msg.textContent = 'Connection error: ' + error.message;
         msg.className = 'error';
       } finally {
         btn.disabled = false;
@@ -546,7 +547,8 @@
           msg.className = 'error';
         }
       } catch (error) {
-        msg.textContent = 'Server error. Please try again.';
+        console.error('Signup error:', error);
+        msg.textContent = 'Connection error: ' + error.message;
         msg.className = 'error';
       } finally {
         btn.disabled = false;
@@ -600,7 +602,7 @@
     async function checkConnection() {
       const statusText = document.getElementById('api-status-text');
       try {
-        const response = await fetch("http://localhost:8000/");
+        const response = await fetch("http://localhost:8000/api/health");
         if (response.ok) {
           statusText.textContent = "Online";
           statusText.style.color = "#10b981";

@@ -23,8 +23,17 @@ async def get_current_user(auth: HTTPAuthorizationCredentials = Security(securit
             "id": user.id,
             "email": user.email,
             "token": token,
-            "plan": profile.data.get("plan", "free") if profile.data else "free"
+            "plan": profile.data.get("plan", "free") if profile.data else "free",
+            "gmail_connected": profile.data.get("gmail_connected", False) if profile.data else False
         }
     except Exception as e:
-        print(f"Auth error: {str(e)}")
+        error_msg = str(e).lower()
+        print(f"Auth error: {error_msg}")
+        
+        # Prevent accidental logouts on network or rate limit errors
+        if any(x in error_msg for x in ["getaddrinfo", "network", "connection", "timeout"]):
+            raise HTTPException(status_code=503, detail="Auth server unreachable. Please try again.")
+        if any(x in error_msg for x in ["rate limit", "too many requests", "429"]):
+            raise HTTPException(status_code=429, detail="Too many requests. Please try again.")
+            
         raise HTTPException(status_code=401, detail="Could not validate credentials")

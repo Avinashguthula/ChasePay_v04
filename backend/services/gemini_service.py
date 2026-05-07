@@ -4,7 +4,7 @@ from backend.core.config import settings
 genai.configure(api_key=settings.GEMINI_API_KEY)
 
 def generate_reminder_email(client_name: str, amount: float, currency: str, days_overdue: int, reminder_type: str, description: str = None):
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.0-flash')
     
     prompt = f"""
     Generate a professional and polite payment reminder email.

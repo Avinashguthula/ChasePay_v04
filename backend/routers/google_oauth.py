@@ -28,6 +28,7 @@ async def google_login(user: dict = Depends(get_current_user)):
 async def google_callback(code: str, state: str):
     # state contains the user_id
     user_id = state
+    print(f"DEBUG: Google Callback received for User ID: {user_id}")
     
     # Exchange code for tokens
     async with httpx.AsyncClient() as client:
@@ -42,8 +43,10 @@ async def google_callback(code: str, state: str):
             },
         )
         tokens = response.json()
+        print(f"DEBUG: Google Token Response: {tokens}")
         
     if "access_token" not in tokens:
+        print(f"ERROR: No access_token in Google response: {tokens}")
         raise HTTPException(status_code=400, detail="Failed to get tokens from Google")
         
     # Update user in DB
@@ -54,4 +57,4 @@ async def google_callback(code: str, state: str):
     }).eq("id", user_id).execute()
     
     # Redirect back to frontend settings
-    return RedirectResponse(url="http://localhost:5500/settings.html?connected=true")
+    return RedirectResponse(url="http://localhost:8000/settings?connected=true")

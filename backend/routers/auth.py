@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from backend.db.supabase import get_supabase_client
+from backend.db.supabase import get_supabase_client, call_with_retry
 from pydantic import BaseModel
 
 from typing import Optional
@@ -29,7 +29,7 @@ async def signup(data: AuthData):
                 }
             }
             
-        response = supabase.auth.sign_up(signup_data)
+        response = call_with_retry(lambda: supabase.auth.sign_up(signup_data))
         return {"message": "User created", "user": response.user}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -38,10 +38,10 @@ async def signup(data: AuthData):
 async def login(data: AuthData):
     supabase = get_supabase_client()
     try:
-        response = supabase.auth.sign_in_with_password({
+        response = call_with_retry(lambda: supabase.auth.sign_in_with_password({
             "email": data.email,
             "password": data.password
-        })
+        }))
         return {
             "access_token": response.session.access_token,
             "user": response.user
@@ -58,9 +58,9 @@ async def reset_password(data: dict):
     supabase = get_supabase_client()
     try:
         print(f"DEBUG: Attempting password reset for {email}")
-        supabase.auth.reset_password_for_email(email, {
+        call_with_retry(lambda: supabase.auth.reset_password_for_email(email, {
             "redirect_to": "http://localhost:5500/update-password.html"
-        })
+        }))
         print("DEBUG: Password reset email sent successfully")
         return {"message": "Password reset email sent"}
     except Exception as e:
@@ -77,8 +77,8 @@ async def update_password(data: dict):
     supabase = get_supabase_client()
     try:
         # We need to set the session first to use the token
-        supabase.auth.set_session(token, "")
-        supabase.auth.update_user({"password": password})
+        call_with_retry(lambda: supabase.auth.set_session(token, ""))
+        call_with_retry(lambda: supabase.auth.update_user({"password": password}))
         return {"message": "Password updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

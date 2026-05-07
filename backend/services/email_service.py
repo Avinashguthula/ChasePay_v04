@@ -12,6 +12,7 @@ async def send_email_unified(user_id: str, to_email: str, subject: str, body: st
     
     plan = user_data.get("plan", "free")
     gmail_connected = user_data.get("gmail_connected", False)
+    print(f"DEBUG: Unified Email Check - User: {user_id}, Plan: {plan}, Gmail Connected: {gmail_connected}")
     
     sent = False
     
@@ -19,7 +20,9 @@ async def send_email_unified(user_id: str, to_email: str, subject: str, body: st
         try:
             sent = await send_via_gmail(user_data, to_email, subject, body)
         except Exception as e:
-            print(f"Gmail failed for {user_id}: {e}, falling back to Resend")
+            import traceback
+            print(f"Gmail failed for {user_id}: {e}")
+            traceback.print_exc()
             sent = False
             
     if not sent:
@@ -31,10 +34,11 @@ async def send_email_unified(user_id: str, to_email: str, subject: str, body: st
                 "subject": subject,
                 "html": body.replace("\n", "<br>"),
             }
+            print(f"DEBUG: Calling Resend API with params: {params}")
             resend.Emails.send(params)
             return True
         except Exception as e:
-            print(f"Resend failed: {e}")
+            print(f"RESEND ERROR: {e}")
             return False
     return True
 

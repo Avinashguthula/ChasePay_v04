@@ -14,6 +14,8 @@ class InvoiceCreate(BaseModel):
     amount: float
     currency: str = "USD"
     due_date: date
+    invoice_date: Optional[date] = None
+    invoice_number: Optional[str] = None
     description: Optional[str] = None
 
 class InvoiceUpdate(BaseModel):
@@ -42,6 +44,35 @@ async def get_invoice_stats(user: dict = Depends(get_current_user)):
         "unpaid": unpaid,
         "overdue": overdue
     }
+
+@router.get("/next-number")
+async def get_next_invoice_number(user: dict = Depends(get_current_user)):
+    supabase = get_supabase_client(user["token"])
+    current_year = datetime.now().year
+    year_prefix = f"INV-{current_year}-"
+    
+    # Use admin to ensure we can see all invoices for accurate numbering if needed, 
+    # but regular client should be fine with RLS if it's scoped to the user.
+    latest_inv_res = supabase_admin.table("invoices") \
+        .select("invoice_number") \
+        .eq("user_id", user["id"]) \
+        .like("invoice_number", f"{year_prefix}%") \
+        .order("invoice_number", desc=True) \
+        .limit(1) \
+        .execute()
+    
+    next_num = 1
+    if latest_inv_res.data and latest_inv_res.data[0]["invoice_number"]:
+        try:
+            last_number_str = latest_inv_res.data[0]["invoice_number"]
+            last_num = int(last_number_str.split("-")[-1])
+            next_num = last_num + 1
+        except (ValueError, IndexError):
+            # Fallback: count all invoices for this user
+            count_res = supabase_admin.table("invoices").select("id", count="exact").eq("user_id", user["id"]).execute()
+            next_num = (count_res.count or 0) + 1
+    
+    return {"next_number": f"{year_prefix}{next_num:03d}"}
 
 @router.get("/")
 async def get_invoices(user: dict = Depends(get_current_user)):
@@ -86,8 +117,37 @@ async def create_invoice(invoice: InvoiceCreate, user: dict = Depends(get_curren
     else:
         print(f"DEBUG: Client {invoice.client_email} already exists.")
     
+    # Generate invoice number if not provided: INV-YYYY-NNN
+    if invoice.invoice_number:
+        invoice_number = invoice.invoice_number
+    else:
+        current_year = datetime.now().year
+        year_prefix = f"INV-{current_year}-"
+        
+        # Get the latest invoice number for this user and this year
+        latest_inv_res = supabase_admin.table("invoices") \
+            .select("invoice_number") \
+            .eq("user_id", user["id"]) \
+            .like("invoice_number", f"{year_prefix}%") \
+            .order("invoice_number", desc=True) \
+            .limit(1) \
+            .execute()
+        
+        next_num = 1
+        if latest_inv_res.data and latest_inv_res.data[0]["invoice_number"]:
+            try:
+                last_number_str = latest_inv_res.data[0]["invoice_number"]
+                last_num = int(last_number_str.split("-")[-1])
+                next_num = last_num + 1
+            except (ValueError, IndexError):
+                next_num = current_count + 1
+        
+        invoice_number = f"{year_prefix}{next_num:03d}"
+
     data = {
         "user_id": user["id"],
+        "invoice_number": invoice_number,
+        "invoice_date": str(invoice.invoice_date) if invoice.invoice_date else str(date.today()),
         "client_name": invoice.client_name,
         "client_email": invoice.client_email,
         "amount": invoice.amount,
