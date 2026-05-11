@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChasePay — Sign in</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: theme('colors.bg');
+      color: theme('colors.text');
+      background-image: 
+        linear-gradient(to right, rgba(215, 215, 208, 0.5) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(215, 215, 208, 0.5) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .font-mono { font-family: 'IBM Plex Mono', monospace; }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 relative">
+
+  <!-- Mux-style Left Layout Border (visual effect) -->
+  <div class="fixed top-0 left-0 w-2 h-full bg-gradient-to-b from-pink via-amber to-blue z-0"></div>
+  <div class="fixed top-0 left-2 w-px h-full bg-border z-0"></div>
+
+  <div class="w-full max-w-6xl flex gap-12 items-center relative z-10 mx-auto">
+    
+    <!-- Left Marketing Copy -->
+    <div class="hidden lg:block w-1/2">
+      <div class="grid grid-cols-2 gap-px bg-border border border-border rounded-xl overflow-hidden shadow-soft">
+        <div class="bg-bg p-8 border-l-4 border-pink">
+          <div class="w-8 h-8 bg-pink/10 rounded flex items-center justify-center mb-4 text-pink">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2">Blazing fast API</h3>
+          <p class="text-sm text-muted">Get invoices ready in milliseconds. 100x faster than traditional methods.</p>
+        </div>
+        <div class="bg-bg p-8 border-l-4 border-green">
+          <div class="w-8 h-8 bg-green/10 rounded flex items-center justify-center mb-4 text-green">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2">Beautiful UX</h3>
+          <p class="text-sm text-muted">A fully managed end-to-end billing experience tailored for SaaS.</p>
+        </div>
+        <div class="bg-bg p-8 border-l-4 border-amber">
+          <div class="w-8 h-8 bg-amber/10 rounded flex items-center justify-center mb-4 text-amber">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2">DevEx to core</h3>
+          <p class="text-sm text-muted">Clean architecture with webhooks and detailed event logs.</p>
+        </div>
+        <div class="bg-bg p-8 border-l-4 border-blue flex flex-col justify-center">
+          <h3 class="font-heading font-bold text-lg mb-2 uppercase tracking-wide">ChasePay</h3>
+          <p class="text-sm text-muted">The payments layer built for developers.</p>
+          <a href="index.html" class="text-xs font-mono font-semibold mt-4 flex items-center text-text hover:text-blue transition-colors">Read more &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Auth Card -->
+    <div class="w-full max-w-md mx-auto lg:w-1/2">
+      <div class="bg-card rounded-[36px] shadow-hover border border-border p-10 relative overflow-hidden group">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <a href="index.html" class="inline-block font-heading font-bold text-2xl tracking-tighter text-text mb-4">
+            CHASE<span class="text-amber">PAY</span>
+          </a>
+          <h1 class="font-heading text-2xl font-bold mb-1" id="form-title">Log in to your account</h1>
+          <p class="text-sm text-muted">
+            <span id="form-subtitle">Don't have an account?</span> 
+            <button onclick="switchTab('signup')" id="toggle-auth" class="text-text font-semibold hover:underline border-b border-border ml-1">Sign up</button>
+          </p>
+        </div>
+
+        <div class="space-y-4 mb-6">
+          <p class="text-xs font-mono text-center text-muted uppercase tracking-wider mb-2">Continue with</p>
+          <div class="grid grid-cols-2 gap-4">
+            <a href="https://tangfbapazsvvnvajcqn.supabase.co/auth/v1/authorize?provider=github&redirect_to=http://localhost:8000/" class="flex items-center justify-center gap-2 py-3 bg-bg border border-border rounded-xl text-sm font-semibold hover:bg-white hover:border-text transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path></svg>
+              GitHub
+            </a>
+            <a href="https://tangfbapazsvvnvajcqn.supabase.co/auth/v1/authorize?provider=google&redirect_to=http://localhost:8000/" class="flex items-center justify-center gap-2 py-3 bg-bg border border-border rounded-xl text-sm font-semibold hover:bg-white hover:border-text transition-colors">
+              <svg class="w-5 h-5" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4" />
+                <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853" />
+                <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05" />
+                <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335" />
+              </svg>
+              Google
+            </a>
+          </div>
+        </div>
+
+        <div class="relative flex items-center justify-center mb-6">
+          <hr class="w-full border-border">
+          <span class="absolute bg-card px-3 text-xs text-muted font-mono uppercase tracking-wider">Email</span>
+        </div>
+
+        <!-- Forms Container -->
+        <div id="form-container">
+          <!-- Login Form -->
+          <div id="tab-login" class="space-y-4">
+            <div>
+              <input type="email" id="login-email" class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-amber/50 focus:border-amber transition-all" placeholder="name@company.com">
+            </div>
+            <div>
+              <div class="relative">
+                <input type="password" id="login-password" class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-amber/50 focus:border-amber transition-all" placeholder="Password">
+                <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-text" onclick="togglePw('login-password')">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                </button>
+              </div>
+            </div>
+            <button id="login-btn-final" class="w-full h-12 rounded-full bg-amber text-text font-bold text-sm tracking-wide hover:bg-[#F2A900] transition-colors mt-2 shadow-[0_4px_14px_rgba(255,178,0,0.39)]">
+              CONTINUE
+            </button>
+            <div class="text-center pt-2">
+              <a href="forgot-password.html" class="text-xs text-muted hover:text-text underline decoration-border underline-offset-4">Forgot your password?</a>
+            </div>
+          </div>
+
+          <!-- Signup Form (Hidden by default) -->
+          <div id="tab-signup" class="space-y-4 hidden">
+            <div class="grid grid-cols-2 gap-3">
+              <input type="text" id="signup-first-name" class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-amber/50 focus:border-amber transition-all" placeholder="First name">
+              <input type="text" id="signup-last-name" class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-amber/50 focus:border-amber transition-all" placeholder="Last name">
+            </div>
+            <div>
+              <input type="email" id="signup-email" class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-amber/50 focus:border-amber transition-all" placeholder="name@company.com">
+            </div>
+            <div>
+              <div class="relative">
+                <input type="password" id="signup-password" class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-amber/50 focus:border-amber transition-all" placeholder="Create password (min 8 chars)">
+                <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-text" onclick="togglePw('signup-password')">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                </button>
+              </div>
+            </div>
+            <button id="signup-btn-final" class="w-full h-12 rounded-full bg-amber text-text font-bold text-sm tracking-wide hover:bg-[#F2A900] transition-colors mt-2 shadow-[0_4px_14px_rgba(255,178,0,0.39)]">
+              CREATE ACCOUNT
+            </button>
+            <p class="text-[11px] text-muted text-center pt-2 leading-relaxed">
+              By continuing, you agree to our <a href="#" class="text-text underline">Terms</a> & <a href="#" class="text-text underline">Privacy Policy</a>.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Status Message -->
+        <div id="status-msg" class="hidden mt-4 p-3 rounded-xl text-sm font-medium text-center border"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    function switchTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tab-login').classList.toggle('hidden', !isLogin);
+      document.getElementById('tab-signup').classList.toggle('hidden', isLogin);
+      
+      document.getElementById('form-title').textContent = isLogin ? 'Log in to your account' : 'Create an account';
+      document.getElementById('form-subtitle').textContent = isLogin ? "Don't have an account?" : "Already have an account?";
+      
+      const toggleBtn = document.getElementById('toggle-auth');
+      toggleBtn.textContent = isLogin ? 'Sign up' : 'Log in';
+      toggleBtn.setAttribute('onclick', `switchTab('${isLogin ? 'signup' : 'login'}')`);
+      
+      const msg = document.getElementById('status-msg');
+      msg.classList.add('hidden');
+      msg.textContent = '';
+    }
+
+    function togglePw(id) {
+      const el = document.getElementById(id);
+      if (el.type === 'password') {
+        el.type = 'text';
+      } else {
+        el.type = 'password';
+      }
+    }
+
+    document.getElementById('login-btn-final').addEventListener('click', async () => {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('login-btn-final');
+      const msg = document.getElementById('status-msg');
+
+      if (!email || !password) {
+        msg.textContent = 'Please fill in all fields';
+        msg.className = 'mt-4 p-3 rounded-xl text-sm font-medium text-center border border-red-200 bg-red-50 text-red-600';
+        msg.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'SIGNING IN...';
+
+      const API_URL = "http://localhost:8000/api";
+      try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          localStorage.setItem('access_token', data.access_token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          window.location.href = 'dashboard.html';
+        } else {
+          msg.textContent = data.detail || 'Login failed';
+          msg.className = 'mt-4 p-3 rounded-xl text-sm font-medium text-center border border-red-200 bg-red-50 text-red-600';
+          msg.classList.remove('hidden');
+        }
+      } catch (error) {
+        msg.textContent = 'Connection error';
+        msg.className = 'mt-4 p-3 rounded-xl text-sm font-medium text-center border border-red-200 bg-red-50 text-red-600';
+        msg.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'CONTINUE';
+      }
+    });
+
+    document.getElementById('signup-btn-final').addEventListener('click', async () => {
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+      const firstName = document.getElementById('signup-first-name').value;
+      const lastName = document.getElementById('signup-last-name').value;
+      const btn = document.getElementById('signup-btn-final');
+      const msg = document.getElementById('status-msg');
+
+      if (!email || !password) {
+        msg.textContent = 'Please fill in all fields';
+        msg.className = 'mt-4 p-3 rounded-xl text-sm font-medium text-center border border-red-200 bg-red-50 text-red-600';
+        msg.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'CREATING...';
+
+      const API_URL = "http://localhost:8000/api";
+      try {
+        const response = await fetch(`${API_URL}/auth/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, first_name: firstName, last_name: lastName })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          msg.innerHTML = '<strong>Success!</strong> Please check your email.';
+          msg.className = 'mt-4 p-3 rounded-xl text-sm font-medium text-center border border-green-200 bg-green-50 text-green-700';
+          msg.classList.remove('hidden');
+          btn.textContent = 'EMAIL SENT';
+        } else {
+          msg.textContent = data.detail || 'Signup failed';
+          msg.className = 'mt-4 p-3 rounded-xl text-sm font-medium text-center border border-red-200 bg-red-50 text-red-600';
+          msg.classList.remove('hidden');
+          btn.disabled = false;
+          btn.textContent = 'CREATE ACCOUNT';
+        }
+      } catch (error) {
+        msg.textContent = 'Connection error';
+        msg.className = 'mt-4 p-3 rounded-xl text-sm font-medium text-center border border-red-200 bg-red-50 text-red-600';
+        msg.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'CREATE ACCOUNT';
+      }
+    });
+  </script>
+</body>
+</html>

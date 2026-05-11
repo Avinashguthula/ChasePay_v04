@@ -17,7 +17,7 @@ def generate_reminder_email(client_name: str, amount: float, currency: str, days
     - Reminder Type: {reminder_type} (options: day1, day3, day7)
     
     Tone:
-    - day1: Friendly and gentle nudge.
+    - day1: Friendly and gentle follow-up.
     - day3: Firm but professional follow-up.
     - day7: Urgent final notice before further action.
     

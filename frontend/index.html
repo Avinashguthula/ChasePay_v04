@@ -1,622 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChasePay — Sign in</title>
+  <title>ChasePay — The Payments Layer for Developers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="shared.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 2rem 1.5rem;
-      background-color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      background-color: theme('colors.bg');
+      color: theme('colors.text');
+      background-image: 
+        linear-gradient(to right, rgba(215, 215, 208, 0.4) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(215, 215, 208, 0.4) 1px, transparent 1px);
+      background-size: 80px 80px;
     }
-
-    /* Subtle radial glow behind the card */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 40%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 400px;
-      background: radial-gradient(ellipse, rgba(37, 99, 235, 0.07) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .auth-wrap {
-      width: 100%;
-      max-width: 420px;
-      position: relative;
-      z-index: 1;
-      animation: fadeUp 0.55s both;
-    }
-
-    .auth-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.6rem;
-      letter-spacing: -0.03em;
-      color: var(--ink);
-      text-decoration: none;
-      display: block;
-      margin-bottom: 2.2rem;
-      text-align: center;
-    }
-
-    .auth-logo span {
-      color: var(--accent);
-    }
-
-    .auth-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2.4rem 2.2rem;
-      box-shadow: 0 8px 40px rgba(15, 14, 12, 0.06);
-    }
-
-    .auth-heading {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.55rem;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.35rem;
-    }
-
-    .auth-sub {
-      font-size: 0.88rem;
-      color: var(--muted);
-      margin-bottom: 2rem;
-      line-height: 1.55;
-    }
-
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-    }
-
-    .or-divider {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin: 0.4rem 0;
-    }
-
-    .or-divider::before,
-    .or-divider::after {
-      content: '';
-      flex: 1;
-      border-top: 1px solid var(--border);
-    }
-
-    .or-divider span {
-      font-size: 0.75rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .google-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      padding: 0.78rem 1rem;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--ink);
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-      text-decoration: none;
-    }
-
-    .google-btn:hover {
-      border-color: rgba(15, 14, 12, 0.25);
-      background: rgba(245, 242, 235, 0.5);
-      transform: translateY(-1px);
-    }
-
-    .google-icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-
-    .auth-submit {
-      width: 100%;
-      padding: 0.85rem;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      background: var(--ink);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: background 0.2s, transform 0.15s;
-      margin-top: 0.2rem;
-    }
-
-    .auth-submit:hover {
-      background: var(--accent);
-      transform: translateY(-1px);
-    }
-
-    .auth-submit:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    .auth-switch {
-      text-align: center;
-      margin-top: 1.4rem;
-      font-size: 0.83rem;
-      color: var(--muted);
-    }
-
-    .auth-switch a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .auth-switch a:hover {
-      text-decoration: underline;
-    }
-
-    /* Tab toggle */
-    .auth-tabs {
-      display: flex;
-      gap: 0;
-      background: rgba(15, 14, 12, 0.05);
-      border-radius: 10px;
-      padding: 4px;
-      margin-bottom: 1.8rem;
-    }
-
-    .auth-tab {
-      flex: 1;
-      padding: 0.55rem;
-      border-radius: 7px;
-      border: none;
-      background: none;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.86rem;
-      font-weight: 500;
-      color: var(--muted);
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .auth-tab.active {
-      background: var(--card-bg);
-      color: var(--ink);
-      box-shadow: 0 1px 4px rgba(15, 14, 12, 0.08);
-    }
-
-    .trust-line {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-top: 2rem;
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-
-    .trust-item {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    /* Password field */
-    .input-wrap {
-      position: relative;
-    }
-
-    .input-eye {
-      position: absolute;
-      right: 0.9rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1;
-      padding: 0;
-    }
-
-    .input-eye:hover {
-      color: var(--ink);
-    }
-
-    .input-wrap .form-input {
-      padding-right: 2.8rem;
-    }
-
-    .forgot-link {
-      font-size: 0.78rem;
-      color: var(--muted);
-      text-decoration: none;
-      text-align: right;
-      display: block;
-      margin-top: -0.6rem;
-    }
-
-    .forgot-link:hover {
-      color: var(--accent);
-    }
-
-    #status-msg {
-      margin-top: 1rem;
-      padding: 0.75rem;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      text-align: center;
-      display: none;
-    }
-
-    #status-msg.error {
-      background: #fee2e2;
-      color: #b91c1c;
-      display: block;
-    }
-
-    #status-msg.success {
-      background: #dcfce7;
-      color: #15803d;
-      display: block;
-    }
+    h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .font-mono { font-family: 'IBM Plex Mono', monospace; }
   </style>
 </head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden">
 
-<body>
-
-  <div class="auth-wrap">
-    <a href="index.html" class="auth-logo">Chase<span>Pay</span></a>
-
-    <div class="auth-card">
-
-      <div class="auth-tabs">
-        <button class="auth-tab active" onclick="switchTab('login', this)">Sign in</button>
-        <button class="auth-tab" onclick="switchTab('signup', this)">Create account</button>
-      </div>
-
-      <!-- LOGIN FORM -->
-      <div id="tab-login">
-        <h2 class="auth-heading">Welcome back</h2>
-        <p class="auth-sub">Sign in to your ChasePay account and keep the payments flowing.</p>
-
-        <div class="auth-form">
-          <a href="https://tangfbapazsvvnvajcqn.supabase.co/auth/v1/authorize?provider=google&redirect_to=http://localhost:5500/"
-            class="google-btn">
-            <svg class="google-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"
-                fill="#4285F4" />
-              <path
-                d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"
-                fill="#34A853" />
-              <path
-                d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"
-                fill="#FBBC05" />
-              <path
-                d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"
-                fill="#EA4335" />
-            </svg>
-            Continue with Google
-          </a>
-
-          <div class="or-divider"><span>or</span></div>
-
-          <div class="form-group">
-            <label class="form-label">Email </label>
-            <input type="email" id="login-email" class="form-input" placeholder="Enter your email">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <div class="input-wrap">
-              <input type="password" class="form-input" id="login-password" placeholder="Enter your password">
-              <button class="input-eye" onclick="togglePw('login-password', this)">👁</button>
-            </div>
-          </div>
-          <a href="#" class="forgot-link" onclick="switchTab('forgot', this)">Forgot password?</a>
-
-          <button id="login-btn-final" class="auth-submit">Sign in →</button>
-        </div>
-      </div>
-
-      <!-- FORGOT PASSWORD FORM -->
-      <div id="tab-forgot" style="display:none;">
-        <h2 class="auth-heading">Reset password</h2>
-        <p class="auth-sub">Enter your email and we'll send you a link to reset your password.</p>
-
-        <div class="auth-form">
-          <div class="form-group">
-            <label class="form-label">Email address</label>
-            <input type="email" id="forgot-email" class="form-input" placeholder="Enter your email">
-          </div>
-
-          <button id="forgot-btn-final" class="auth-submit">Send reset link →</button>
-
-          <div class="auth-switch">
-            <a href="#" onclick="switchTab('login', document.querySelector('.auth-tab'))">Back to sign in</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- SIGNUP FORM -->
-      <div id="tab-signup" style="display:none;">
-        <h2 class="auth-heading">Start for free</h2>
-        <p class="auth-sub">No credit card needed. Set up in 3 minutes and start recovering payments.</p>
-
-        <div class="auth-form">
-          <a href="https://tangfbapazsvvnvajcqn.supabase.co/auth/v1/authorize?provider=google&redirect_to=http://localhost:5500/"
-            class="google-btn">
-            <svg class="google-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"
-                fill="#4285F4" />
-              <path
-                d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"
-                fill="#34A853" />
-              <path
-                d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"
-                fill="#FBBC05" />
-              <path
-                d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"
-                fill="#EA4335" />
-            </svg>
-            Sign up with Google
-          </a>
-
-          <div class="or-divider"><span>or</span></div>
-
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem;">
-            <div class="form-group">
-              <label class="form-label">First name</label>
-              <input type="text" id="signup-first-name" class="form-input" placeholder="First name">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Last name</label>
-              <input type="text" id="signup-last-name" class="form-input" placeholder="Last name">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input type="email" id="signup-email" class="form-input" placeholder="Enter your email">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <div class="input-wrap">
-              <input type="password" id="signup-password" class="form-input" placeholder="Min 8 characters">
-              <button class="input-eye" onclick="togglePw('signup-password', this)">👁</button>
-            </div>
-          </div>
-
-          <button id="signup-btn-final" class="auth-submit">Create free account →</button>
-
-          <p style="font-size:0.74rem; color:var(--muted); text-align:center; line-height:1.5;">
-            By creating an account you agree to our <a href="#" style="color:var(--accent);">Terms</a> and <a href="#"
-              style="color:var(--accent);">Privacy Policy</a>.
-          </p>
-        </div>
-      </div>
-
-      <div id="status-msg"></div>
-
-      <!-- <div id="api-status" style="margin-top: 1.5rem; text-align: center; font-size: 0.7rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 1rem;">
-        Backend Status: <span id="api-status-text" style="color: #f59e0b; font-weight: 600;">Checking...</span>
-      </div> -->
-
-    </div><!-- /.auth-card -->
-
-    <div class="trust-line">
-      <span class="trust-item">🔒 SSL secured</span>
-      <span class="trust-item">✓ No card needed</span>
-      <span class="trust-item">🇮🇳 Made in India</span>
-    </div>
+  <!-- Thin Grid Lines (Mux Style) -->
+  <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
+    <div class="absolute left-8 lg:left-24 top-0 bottom-0 w-px bg-border"></div>
+    <div class="absolute right-8 lg:right-24 top-0 bottom-0 w-px bg-border"></div>
   </div>
 
-  <script src="js/auth.js"></script>
-  <script>
-    function switchTab(tab, btn) {
-      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-      if (btn && btn.classList.contains('auth-tab')) btn.classList.add('active');
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 bg-bg/90 backdrop-blur-md border-b border-border">
+    <div class="max-w-7xl mx-auto px-8 lg:px-24 h-20 flex items-center justify-between">
+      <a href="index.html" class="font-heading font-bold text-2xl tracking-tighter text-text">
+        CHASE<span class="text-amber">PAY</span>
+      </a>
+      
+      <div class="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest font-semibold text-text">
+        <a href="#" class="hover:text-amber transition-colors">Product <span class="text-muted ml-1">v</span></a>
+        <a href="#" class="hover:text-amber transition-colors">Solutions <span class="text-muted ml-1">v</span></a>
+        <a href="#" class="hover:text-amber transition-colors">Developers <span class="text-muted ml-1">v</span></a>
+        <a href="#" class="hover:text-amber transition-colors">Pricing</a>
+      </div>
 
-      document.getElementById('tab-login').style.display = tab === 'login' ? '' : 'none';
-      document.getElementById('tab-signup').style.display = tab === 'signup' ? '' : 'none';
-      document.getElementById('tab-forgot').style.display = tab === 'forgot' ? '' : 'none';
+      <div class="flex items-center h-full">
+        <a href="login.html" class="h-full flex items-center px-6 font-mono text-xs uppercase tracking-widest font-semibold text-text hover:bg-border/30 border-l border-border transition-colors">Log In</a>
+        <a href="login.html" class="h-full flex items-center px-8 bg-amber font-mono text-xs uppercase tracking-widest font-bold text-text hover:bg-[#F2A900] transition-colors shadow-[0_0_20px_rgba(255,178,0,0.4)]">Get Started</a>
+      </div>
+    </div>
+  </nav>
 
-      document.getElementById('status-msg').className = '';
-      document.getElementById('status-msg').textContent = '';
-    }
+  <!-- Hero Section -->
+  <main class="flex-1 relative z-10">
+    <section class="max-w-7xl mx-auto px-8 lg:px-24 pt-32 pb-24 text-center">
+      
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-card shadow-sm mb-12 animate-[fadeUp_0.5s_ease-out]">
+        <span class="w-2 h-2 rounded-full bg-orange animate-pulse"></span>
+        <span class="text-xs font-mono font-medium text-text">Technical preview</span>
+        <span class="text-xs font-mono font-bold ml-2 text-text">ChasePay Engine &darr;</span>
+      </div>
 
-    function togglePw(id, btn) {
-      const el = document.getElementById(id);
-      if (el.type === 'password') { el.type = 'text'; btn.textContent = '🙈'; }
-      else { el.type = 'password'; btn.textContent = '👁'; }
-    }
+      <h1 class="font-heading text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter uppercase leading-[0.9] mb-8 text-text">
+        Payments For <br> Developers
+      </h1>
+      
+      <p class="text-lg md:text-xl text-muted max-w-3xl mx-auto mb-12 font-medium">
+        ChasePay helps teams do more with payments. Create it, automate it, track it, secure it, scale it. Build cost-effectively in minutes, not months.
+      </p>
 
-    // Intercept the logic from auth.js to use new IDs
-    document.getElementById('login-btn-final').addEventListener('click', async () => {
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
-      const btn = document.getElementById('login-btn-final');
-      const msg = document.getElementById('status-msg');
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="login.html" class="px-10 py-5 rounded-full bg-orange text-white font-mono text-sm uppercase tracking-widest font-bold hover:bg-[#E55700] hover:scale-105 transition-all shadow-[0_10px_30px_rgba(255,97,0,0.4)]">
+          Get Started
+        </a>
+        <a href="#" class="px-10 py-5 rounded-full bg-card border border-border text-text font-mono text-sm uppercase tracking-widest font-bold hover:bg-white hover:scale-105 transition-all shadow-sm">
+          Read Our Docs
+        </a>
+      </div>
+    </section>
 
-      if (!email || !password) {
-        msg.textContent = 'Please fill in all fields';
-        msg.className = 'error';
-        return;
-      }
+    <!-- Trusted Brands -->
+    <section class="max-w-7xl mx-auto px-8 lg:px-24 pb-24">
+      <div class="flex flex-wrap border border-border bg-card rounded-[32px] overflow-hidden shadow-soft items-center justify-center">
+        <div class="px-8 py-6 w-full md:w-auto text-center border-b md:border-b-0 md:border-r border-border">
+          <p class="font-mono text-[10px] uppercase tracking-widest font-bold text-muted">Trusted By<br>Top Brands</p>
+        </div>
+        <div class="flex-1 grid grid-cols-2 md:grid-cols-5 divide-x divide-y md:divide-y-0 divide-border">
+          <div class="px-6 py-8 flex items-center justify-center font-heading font-bold text-xl grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all">CURSOR</div>
+          <div class="px-6 py-8 flex items-center justify-center font-heading font-bold text-xl grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all">Shopify</div>
+          <div class="px-6 py-8 flex items-center justify-center font-heading font-bold text-xl grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all">runway</div>
+          <div class="px-6 py-8 flex items-center justify-center font-heading font-bold text-xl grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all">Dropbox</div>
+          <div class="px-6 py-8 flex items-center justify-center font-heading font-bold text-xl grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all">yelp</div>
+        </div>
+      </div>
+    </section>
 
-      btn.disabled = true;
-      btn.textContent = 'Signing in...';
+    <!-- Feature Grid -->
+    <section class="max-w-7xl mx-auto px-8 lg:px-24 pb-32">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-border border border-border rounded-[32px] overflow-hidden shadow-soft">
+        
+        <div class="bg-bg p-12 md:p-16 border-l-[6px] border-pink group hover:bg-white transition-colors">
+          <div class="w-12 h-12 bg-pink/10 rounded-xl flex items-center justify-center mb-6 text-pink group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <h3 class="font-heading font-bold text-2xl mb-4">Shockingly affordable</h3>
+          <p class="text-muted leading-relaxed">Choose the plan that's best for your project. Start free, pay as you go, or pre-pay for a massive discount.</p>
+        </div>
 
-      const API_URL = "http://localhost:8000/api";
-      try {
-        const response = await fetch(`${API_URL}/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
+        <div class="bg-bg p-12 md:p-16 border-l-[6px] border-green group hover:bg-white transition-colors">
+          <div class="w-12 h-12 bg-green/10 rounded-xl flex items-center justify-center mb-6 text-green group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <h3 class="font-heading font-bold text-2xl mb-4">Blazing fast</h3>
+          <p class="text-muted leading-relaxed">Our median time to get a payment ready is less than 2 seconds. 100x faster than other options.</p>
+        </div>
 
-        const data = await response.json();
-        if (response.ok) {
-          localStorage.setItem('access_token', data.access_token);
-          localStorage.setItem('user', JSON.stringify(data.user));
-          window.location.href = 'dashboard.html';
-        } else {
-          msg.textContent = data.detail || 'Login failed';
-          msg.className = 'error';
-        }
-      } catch (error) {
-        console.error('Login error:', error);
-        msg.textContent = 'Connection error: ' + error.message;
-        msg.className = 'error';
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Sign in →';
-      }
-    });
+        <div class="bg-bg p-12 md:p-16 border-l-[6px] border-amber group hover:bg-white transition-colors">
+          <div class="w-12 h-12 bg-amber/10 rounded-xl flex items-center justify-center mb-6 text-amber group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <h3 class="font-heading font-bold text-2xl mb-4">Beautiful UX</h3>
+          <p class="text-muted leading-relaxed">Our smart architecture makes sure you have the best looking dashboard for your use case.</p>
+        </div>
 
-    document.getElementById('signup-btn-final').addEventListener('click', async () => {
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
-      const firstName = document.getElementById('signup-first-name').value;
-      const lastName = document.getElementById('signup-last-name').value;
-      const btn = document.getElementById('signup-btn-final');
-      const msg = document.getElementById('status-msg');
+        <div class="bg-bg p-12 md:p-16 border-l-[6px] border-blue group hover:bg-white transition-colors">
+          <div class="w-12 h-12 bg-blue/10 rounded-xl flex items-center justify-center mb-6 text-blue group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+          </div>
+          <h3 class="font-heading font-bold text-2xl mb-4">DevEx to our core</h3>
+          <p class="text-muted leading-relaxed">We take pride in great docs, tooling, and best-in-class support from actual developers.</p>
+        </div>
 
-      if (!email || !password) {
-        msg.textContent = 'Please fill in all fields';
-        msg.className = 'error';
-        return;
-      }
+      </div>
+    </section>
+  </main>
 
-      btn.disabled = true;
-      btn.textContent = 'Creating account...';
+  <!-- Footer -->
+  <footer class="border-t border-border bg-card relative z-10">
+    <div class="max-w-7xl mx-auto px-8 lg:px-24 py-16 flex flex-col md:flex-row justify-between items-center gap-8">
+      <a href="index.html" class="font-heading font-bold text-xl tracking-tighter text-text">
+        CHASE<span class="text-amber">PAY</span>
+      </a>
+      <div class="flex items-center gap-6 text-sm font-semibold text-muted font-mono uppercase">
+        <a href="#" class="hover:text-text transition-colors">Twitter</a>
+        <a href="#" class="hover:text-text transition-colors">GitHub</a>
+        <a href="#" class="hover:text-text transition-colors">Discord</a>
+      </div>
+    </div>
+  </footer>
 
-      const API_URL = "http://localhost:8000/api";
-      try {
-        const response = await fetch(`${API_URL}/auth/signup`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email,
-            password,
-            first_name: firstName,
-            last_name: lastName
-          })
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-          msg.innerHTML = '<strong>Success!</strong> Please check your email and click the confirmation link to activate your account.';
-          msg.className = 'success';
-          // Optional: stay on signup tab to keep the message visible or switch and show message there
-          btn.disabled = true;
-          btn.textContent = 'Email sent!';
-        } else {
-          msg.textContent = data.detail || 'Signup failed';
-          msg.className = 'error';
-        }
-      } catch (error) {
-        console.error('Signup error:', error);
-        msg.textContent = 'Connection error: ' + error.message;
-        msg.className = 'error';
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Create free account →';
-      }
-    });
-
-    document.getElementById('forgot-btn-final').addEventListener('click', async () => {
-      const email = document.getElementById('forgot-email').value;
-      const btn = document.getElementById('forgot-btn-final');
-      const msg = document.getElementById('status-msg');
-
-      if (!email) {
-        msg.textContent = 'Please enter your email';
-        msg.className = 'error';
-        return;
-      }
-
-      btn.disabled = true;
-      btn.textContent = 'Sending...';
-
-      const API_URL = "http://localhost:8000/api";
-      const fullUrl = `${API_URL}/auth/reset-password`;
-      try {
-        const response = await fetch(fullUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-
-        if (response.ok) {
-          msg.textContent = 'Reset link sent! Check your inbox.';
-          msg.className = 'success';
-          btn.textContent = 'Link sent';
-        } else {
-          const data = await response.json().catch(() => ({}));
-          msg.textContent = data.detail || `Error ${response.status}: Not Found at ${fullUrl}`;
-          msg.className = 'error';
-          btn.disabled = false;
-          btn.textContent = 'Send reset link →';
-        }
-      } catch (error) {
-        msg.textContent = 'Server error. Please try again.';
-        msg.className = 'error';
-        btn.disabled = false;
-        btn.textContent = 'Send reset link →';
-      }
-    });
-
-    // Connection Tester
-    async function checkConnection() {
-      const statusText = document.getElementById('api-status-text');
-      try {
-        const response = await fetch("http://localhost:8000/api/health");
-        if (response.ok) {
-          statusText.textContent = "Online";
-          statusText.style.color = "#10b981";
-        } else {
-          statusText.textContent = "Error";
-          statusText.style.color = "#ef4444";
-        }
-      } catch (e) {
-        statusText.textContent = "Offline (Restart Backend)";
-        statusText.style.color = "#ef4444";
-      }
-    }
-    checkConnection();
-  </script>
 </body>
-
 </html>

@@ -1,240 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChasePay - Create Invoice</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChasePay - Create Invoice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: theme('colors.bg');
+      color: theme('colors.text');
+    }
+    h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .font-mono { font-family: 'IBM Plex Mono', monospace; }
+  </style>
 </head>
+<body class="min-h-screen flex flex-col">
 
-<body class="bg-slate-50 min-h-screen flex">
-    <!-- Sidebar (Same as dashboard) -->
-    <aside class="w-64 bg-white border-r border-slate-200 h-screen sticky top-0">
-        <div class="p-6">
-            <h1 class="text-2xl font-bold text-blue-600">ChasePay</h1>
-        </div>
-        <nav class="mt-6 px-4">
-            <a href="dashboard.html"
-                class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
-                <span class="mr-3">📊</span> Dashboard
-            </a>
-            <a href="invoices.html"
-                class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
-                <span class="mr-3">📄</span> Invoices
-            </a>
-            <a href="create-invoice.html"
-                class="flex items-center px-4 py-2 text-slate-700 bg-slate-100 rounded-lg mb-2">
-                <span class="mr-3">➕</span> Create Invoice
-            </a>
-            <a href="settings.html"
-                class="flex items-center px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg mb-2 transition">
-                <span class="mr-3">⚙️</span> Settings
-            </a>
-        </nav>
-    </aside>
-    <div class="main-content">
-        <header class="topbar">
-            <span class="topbar-title">New Invoice</span>
-            <div class="topbar-actions">
-                <a href="invoices.html" class="btn-ghost">← Back to invoices</a>
-            </div>
-        </header>
-        <main class="flex-1 p-8">
-            <div class="max-w-2xl mx-auto">
-                <header class="mb-8">
-                    <h2 class="text-2xl font-bold text-slate-900">Create New Invoice</h2>
-                    <p class="text-slate-500">Fill in the details to send a new invoice.</p>
-                </header>
-
-                <form id="invoice-form" class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Client Name</label>
-                            <input type="text" id="client_name" required
-                                class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Client Email</label>
-                            <input type="email" id="client_email" required
-                                class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Invoice num</label>
-                            <input type="text" id="inv_number" required
-                                class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                oninput="updatePreview()">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Invoice Date</label>
-                            <input type="date" id="inv_date"
-                                class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                oninput="updatePreview()">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Amount</label>
-                            <input type="number" id="amount" step="0.01" required
-                                class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Currency</label>
-                            <select id="currency"
-                                class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                                <option value="USD">USD</option>
-                                <option value="INR">INR</option>
-                                <option value="EUR">EUR</option>
-                                <option value="GBP">GBP</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Due Date</label>
-                            <input type="date" id="due_date" required
-                                class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
-                    </div>
-
-                    <div class="mt-6">
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
-                        <textarea id="description" rows="3"
-                            placeholder="What is this invoice for? (e.g., Web Development Services for April)"
-                            class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
-                        <p class="text-xs text-slate-400 mt-1">This will be included in the reminder emails so your
-                            client
-                            understands the context.</p>
-                    </div>
-
-                    <div class="mt-8 flex space-x-4">
-                        <button type="submit"
-                            class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Save
-                            & Send Invoice</button>
-                        <button type="button" onclick="window.location.href='dashboard.html'"
-                            class="text-slate-600 font-medium px-6 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 transition duration-200">Cancel</button>
-                    </div>
-                </form>
-                <div id="status-msg" class="mt-4 hidden p-4 rounded-lg"></div>
-            </div>
-            <!-- preview -->
-            <div>
-                <div class="preview-aside fade-in-d2">
-                    <div class="preview-title">
-                        <span style="color:var(--gold);">◈</span> Invoice preview
-                    </div>
-
-                    <div class="preview-field">
-                        <div class="preview-field-label">Invoice #</div>
-                        <div class="preview-field-val" id="pv-num">INV-2026-065</div>
-                    </div>
-                    <div class="preview-field">
-                        <div class="preview-field-label">Client</div>
-                        <div class="preview-field-val" id="pv-client">—</div>
-                    </div>
-                    <div class="preview-field">
-                        <div class="preview-field-label">Email</div>
-                        <div class="preview-field-val" id="pv-email" style="font-size:0.8rem; word-break:break-all;">—
-                        </div>
-                    </div>
-                    <div class="preview-field">
-                        <div class="preview-field-label">Due date</div>
-                        <div class="preview-field-val" id="pv-due">—</div>
-                    </div>
-                    <div class="preview-field">
-                        <div class="preview-field-label">Total amount</div>
-                        <div class="preview-field-val big" id="pv-total">₹0</div>
-                    </div>
-
-                    <div class="preview-ai-note">
-                        <strong>🤖 AI will send:</strong><br>
-                        3 personalised reminders via Gmail<br>
-                        Tone: <span id="pv-tone">Professional</span><br>
-                        On days: 1 · 7 · 14 after due date
-                    </div>
-                </div>
-            </div>
-        </main>
+  <!-- Top Navbar (Dark) -->
+  <header class="bg-dark text-white h-14 flex items-center justify-between px-6 sticky top-0 z-50">
+    <div class="flex items-center gap-6">
+      <a href="dashboard.html" class="font-heading font-bold text-xl tracking-tighter text-white">
+        CHASE<span class="text-amber">PAY</span>
+      </a>
+      <div class="hidden md:flex items-center gap-4 text-xs font-mono font-medium text-gray-400">
+        <a href="#" class="hover:text-white transition-colors flex items-center gap-1">Org <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>
+        <span class="text-gray-600">/</span>
+        <a href="#" class="hover:text-white transition-colors flex items-center gap-1">Workspace <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>
+      </div>
     </div>
-    <script src="js/auth.js"></script>
-    <script src="js/api.js"></script>
-    <script>
-        function updatePreview() {
-            const num = document.getElementById('inv_number').value;
-            const client = document.getElementById('client_name').value;
-            const email = document.getElementById('client_email').value;
-            const due = document.getElementById('due_date').value;
-            const amount = document.getElementById('amount').value;
-            const currency = document.getElementById('currency').value;
+    <div class="flex items-center gap-4 text-xs font-mono font-medium text-gray-400">
+      <a href="#" class="hover:text-white transition-colors">Feedback</a>
+      <button class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center hover:text-white hover:border-white transition-colors">?</button>
+      <button onclick="logout()" class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center hover:text-red hover:border-red transition-colors" title="Logout">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+      </button>
+    </div>
+  </header>
 
-            document.getElementById('pv-num').textContent = num || 'INV-2026-000';
-            document.getElementById('pv-client').textContent = client || '—';
-            document.getElementById('pv-email').textContent = email || '—';
-            document.getElementById('pv-due').textContent = due || '—';
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Left Sidebar -->
+    <aside class="w-60 bg-[#EFEFEA] border-r border-border h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto hidden md:block shrink-0">
+      <div class="py-6 flex flex-col gap-8">
+        
+        <!-- Nav Group -->
+        <div>
+          <h4 class="px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold">Billing</h4>
+          <nav class="flex flex-col">
+            <a href="dashboard.html" class="flex items-center px-6 py-2.5 text-sm font-medium text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></span>
+              Overview
+            </a>
+            <a href="invoices.html" class="flex items-center px-6 py-2.5 text-sm font-medium text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></span>
+              Invoices
+            </a>
+            <a href="create-invoice.html" class="flex items-center px-6 py-2.5 text-sm font-medium text-text bg-white/50 border-l-[3px] border-blue relative">
+              <span class="mr-3 text-blue"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg></span>
+              Create Invoice
+            </a>
+          </nav>
+        </div>
 
-            const symbol = currency === 'INR' ? '₹' : (currency === 'USD' ? '$' : (currency === 'EUR' ? '€' : '£'));
-            document.getElementById('pv-total').textContent = `${symbol}${amount || 0}`;
-        }
+        <!-- Environment Group -->
+        <div>
+          <h4 class="px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold">Environment</h4>
+          <nav class="flex flex-col">
+            <a href="settings.html" class="flex items-center px-6 py-2.5 text-sm font-medium text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></span>
+              Settings
+            </a>
+          </nav>
+        </div>
 
-        // Fetch next invoice number on load
-        async function fetchNextInvoiceNumber() {
-            const res = await fetchWithAuth('/invoices/next-number');
-            if (res && res.next_number) {
-                document.getElementById('inv_number').value = res.next_number;
-                updatePreview();
-            }
-        }
+      </div>
+    </aside>
 
-        // Set default date to today
-        document.getElementById('inv_date').valueAsDate = new Date();
+    <!-- Main Content -->
+    <main class="flex-1 p-8 lg:p-12 overflow-y-auto bg-card">
+      <header class="flex justify-between items-end mb-8 border-b border-border pb-6">
+        <div>
+          <h1 class="font-heading font-bold text-3xl text-text mb-2">Create New Invoice</h1>
+          <p class="text-sm text-muted">Fill in the details to generate and send a new invoice via API.</p>
+        </div>
+        <div>
+          <a href="invoices.html" class="text-xs font-mono font-bold uppercase text-muted hover:text-text transition-colors">&larr; Back to invoices</a>
+        </div>
+      </header>
 
-        // Initial fetch
-        fetchNextInvoiceNumber();
+      <div class="flex flex-col lg:flex-row gap-12 items-start">
+        <!-- Form Side -->
+        <div class="w-full lg:w-2/3">
+          <form id="invoice-form" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <div class="space-y-2">
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-muted">Client Name</label>
+                <input type="text" id="client_name" required class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-blue/50 focus:border-blue transition-all">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-muted">Client Email</label>
+                <input type="email" id="client_email" required class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-blue/50 focus:border-blue transition-all">
+              </div>
 
-        // Add input listeners for all preview fields
-        ['client_name', 'client_email', 'due_date', 'amount', 'currency'].forEach(id => {
-            document.getElementById(id).addEventListener('input', updatePreview);
-        });
+              <div class="space-y-2">
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-muted">Invoice Number</label>
+                <input type="text" id="inv_number" required class="w-full h-12 px-4 rounded-xl border border-border bg-bg text-text focus:outline-none focus:ring-2 focus:ring-blue/50 focus:border-blue transition-all font-mono text-sm" oninput="updatePreview()">
+              </div>
 
-        document.getElementById('invoice-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.textContent = 'Creating...';
+              <div class="space-y-2">
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-muted">Invoice Date</label>
+                <input type="date" id="inv_date" class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-blue/50 focus:border-blue transition-all" oninput="updatePreview()">
+              </div>
 
-            const payload = {
-                client_name: document.getElementById('client_name').value,
-                client_email: document.getElementById('client_email').value,
-                invoice_number: document.getElementById('inv_number').value,
-                invoice_date: document.getElementById('inv_date').value,
-                amount: parseFloat(document.getElementById('amount').value),
-                currency: document.getElementById('currency').value,
-                due_date: document.getElementById('due_date').value,
-                description: document.getElementById('description').value
-            };
+              <div class="space-y-2">
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-muted">Amount</label>
+                <input type="number" id="amount" step="0.01" required class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-blue/50 focus:border-blue transition-all font-mono">
+              </div>
 
-            const res = await fetchWithAuth('/invoices/', {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
+              <div class="space-y-2">
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-muted">Currency</label>
+                <select id="currency" class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-blue/50 focus:border-blue transition-all font-mono">
+                  <option value="USD">USD ($)</option>
+                  <option value="INR">INR (₹)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                </select>
+              </div>
 
-            const msg = document.getElementById('status-msg');
-            if (res && res.id) {
-                msg.textContent = 'Invoice created successfully!';
-                msg.className = 'mt-4 p-4 rounded-lg bg-green-100 text-green-700';
-                msg.classList.remove('hidden');
-                setTimeout(() => window.location.href = 'invoices.html', 1500);
-            } else {
-                msg.textContent = res?.detail || 'Failed to create invoice.';
-                msg.className = 'mt-4 p-4 rounded-lg bg-red-100 text-red-700';
-                msg.classList.remove('hidden');
-                btn.disabled = false;
-                btn.textContent = 'Save & Send Invoice';
-            }
-        });
-    </script>
+              <div class="space-y-2 md:col-span-2">
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-muted">Due Date</label>
+                <input type="date" id="due_date" required class="w-full h-12 px-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-blue/50 focus:border-blue transition-all">
+              </div>
+
+            </div>
+
+            <div class="space-y-2 pt-4">
+              <label class="block text-xs font-mono font-bold uppercase tracking-wider text-muted">Description</label>
+              <textarea id="description" rows="3" placeholder="What is this invoice for? (e.g., Web Development Services for April)" class="w-full p-4 rounded-xl border border-border bg-white text-text focus:outline-none focus:ring-2 focus:ring-blue/50 focus:border-blue transition-all resize-none"></textarea>
+              <p class="text-xs text-muted">This will be included in the reminder emails so your client understands the context.</p>
+            </div>
+
+            <div class="pt-6 flex items-center gap-4 border-t border-border mt-8">
+              <button type="submit" class="px-8 py-3 bg-blue text-white rounded-full font-mono text-xs font-bold uppercase tracking-widest hover:bg-[#036BE5] transition-colors shadow-[0_4px_14px_rgba(4,130,255,0.39)]">
+                Save & Send Invoice
+              </button>
+              <button type="button" onclick="window.location.href='invoices.html'" class="px-8 py-3 bg-bg border border-border text-text rounded-full font-mono text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors">
+                Cancel
+              </button>
+            </div>
+          </form>
+
+          <div id="status-msg" class="hidden mt-6 p-4 rounded-xl text-sm font-medium text-center border"></div>
+        </div>
+
+        <!-- Preview Side -->
+        <div class="w-full lg:w-1/3">
+          <div class="sticky top-8 bg-white border border-border rounded-[28px] shadow-soft overflow-hidden">
+            <div class="bg-dark p-6 border-b border-border/20 text-white">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="w-2 h-2 rounded-full bg-amber animate-pulse"></span>
+                <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-muted">Preview</span>
+              </div>
+              <h3 class="font-heading font-bold text-xl">Invoice Generation</h3>
+            </div>
+            
+            <div class="p-6 space-y-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwwLDAsMC4wNSkiLz48L3N2Zz4=')]">
+              
+              <div class="bg-card p-4 rounded-xl border border-border shadow-sm flex flex-col gap-1">
+                <span class="text-[10px] font-mono font-bold uppercase text-muted">Invoice #</span>
+                <span class="font-mono text-sm font-semibold" id="pv-num">INV-2026-000</span>
+              </div>
+
+              <div class="bg-card p-4 rounded-xl border border-border shadow-sm flex flex-col gap-1">
+                <span class="text-[10px] font-mono font-bold uppercase text-muted">Client</span>
+                <span class="text-sm font-medium" id="pv-client">—</span>
+                <span class="font-mono text-[11px] text-muted truncate" id="pv-email">—</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-card p-4 rounded-xl border border-border shadow-sm flex flex-col gap-1">
+                  <span class="text-[10px] font-mono font-bold uppercase text-muted">Due Date</span>
+                  <span class="font-mono text-sm font-semibold" id="pv-due">—</span>
+                </div>
+                <div class="bg-card p-4 rounded-xl border border-blue shadow-[0_4px_14px_rgba(4,130,255,0.15)] flex flex-col gap-1 bg-blue/5">
+                  <span class="text-[10px] font-mono font-bold uppercase text-blue">Total Amount</span>
+                  <span class="font-heading font-bold text-xl text-text" id="pv-total">$0</span>
+                </div>
+              </div>
+
+              <div class="bg-card p-4 rounded-xl border border-border shadow-sm flex gap-3 items-start mt-4">
+                <div class="text-xl">🤖</div>
+                <div>
+                  <p class="text-xs font-bold text-text mb-1">AI Automation Active</p>
+                  <p class="text-[11px] text-muted leading-relaxed">Will send 3 personalized reminders via Gmail on days 1, 7, and 14 after due date. Tone: <span id="pv-tone" class="font-mono font-semibold text-text">Professional</span></p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    function updatePreview() {
+      const num = document.getElementById('inv_number').value;
+      const client = document.getElementById('client_name').value;
+      const email = document.getElementById('client_email').value;
+      const due = document.getElementById('due_date').value;
+      const amount = document.getElementById('amount').value;
+      const currency = document.getElementById('currency').value;
+
+      document.getElementById('pv-num').textContent = num || 'INV-2026-000';
+      document.getElementById('pv-client').textContent = client || '—';
+      document.getElementById('pv-email').textContent = email || '—';
+      document.getElementById('pv-due').textContent = due || '—';
+
+      const symbol = currency === 'INR' ? '₹' : (currency === 'USD' ? '$' : (currency === 'EUR' ? '€' : '£'));
+      document.getElementById('pv-total').textContent = `${symbol}${amount || 0}`;
+    }
+
+    async function fetchNextInvoiceNumber() {
+      const res = await fetchWithAuth('/invoices/next-number');
+      if (res && res.next_number) {
+        document.getElementById('inv_number').value = res.next_number;
+        updatePreview();
+      }
+    }
+
+    document.getElementById('inv_date').valueAsDate = new Date();
+    fetchNextInvoiceNumber();
+
+    ['client_name', 'client_email', 'due_date', 'amount', 'currency'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updatePreview);
+    });
+
+    document.getElementById('invoice-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'CREATING...';
+
+      const payload = {
+        client_name: document.getElementById('client_name').value,
+        client_email: document.getElementById('client_email').value,
+        invoice_number: document.getElementById('inv_number').value,
+        invoice_date: document.getElementById('inv_date').value,
+        amount: parseFloat(document.getElementById('amount').value),
+        currency: document.getElementById('currency').value,
+        due_date: document.getElementById('due_date').value,
+        description: document.getElementById('description').value
+      };
+
+      const res = await fetchWithAuth('/invoices/', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+
+      const msg = document.getElementById('status-msg');
+      if (res && res.id) {
+        msg.textContent = 'Invoice created successfully! Redirecting...';
+        msg.className = 'mt-6 p-4 rounded-xl text-sm font-medium text-center border border-green border-green/20 bg-green/5 text-green';
+        msg.classList.remove('hidden');
+        setTimeout(() => window.location.href = 'invoices.html', 1500);
+      } else {
+        msg.textContent = res?.detail || 'Failed to create invoice.';
+        msg.className = 'mt-6 p-4 rounded-xl text-sm font-medium text-center border border-red border-red/20 bg-red/5 text-red';
+        msg.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'SAVE & SEND INVOICE';
+      }
+    });
+  </script>
 </body>
-
 </html>

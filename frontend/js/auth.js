@@ -59,10 +59,11 @@ document.getElementById('signup-btn')?.addEventListener('click', async () => {
 
 function checkAuth() {
     const token = localStorage.getItem('access_token');
-    const isLoginPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+    const publicPages = ['index.html', 'login.html', '/'];
+    const isLoginPage = publicPages.some(page => window.location.pathname.endsWith(page));
     
     if (!token && !isLoginPage) {
-        window.location.href = 'index.html';
+        window.location.href = 'login.html';
     }
 }
 
@@ -97,7 +98,7 @@ function logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user');
-    window.location.href = 'index.html';
+    window.location.href = 'login.html';
 }
 
 // Initialize
