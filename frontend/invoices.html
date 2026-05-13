@@ -30,11 +30,13 @@
       z-index: 40;
       background-color: #EFEFEA;
     }
+
     aside:hover {
       width: 260px !important;
     }
 
-    .nav-label, .full-label {
+    .nav-label,
+    .full-label {
       opacity: 0;
       max-width: 0;
       visibility: hidden;
@@ -69,10 +71,11 @@
       overflow: hidden;
       margin-right: 0;
     }
-    
+
     aside nav a {
       justify-content: flex-start;
-      padding-left: 30px !important; /* Centers the 24px icon in 84px sidebar */
+      padding-left: 30px !important;
+      /* Centers the 24px icon in 84px sidebar */
       transition: background 0.2s ease, padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), border 0.2s ease;
     }
 
@@ -84,8 +87,9 @@
     .nav-active {
       background: #FFFFFF !important;
       border-left: 3px solid var(--accent-color, #FFB200) !important;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
     }
+
     .nav-active span {
       color: var(--accent-color, #FFB200) !important;
       opacity: 1 !important;
@@ -114,125 +118,88 @@
       overflow-y: hidden;
     }
 
-    /* ── View Modal (on-theme) ── */
+    /* ── Minimalist View Modal ── */
     .vm-card {
-      background: #FFFFFF;
-      border: 1px solid #D7D7D0;
-      border-radius: 28px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.07);
+      background: #fbd8d8;
+      border: 1px solid #E8E8E1;
+      border-radius: 12px;
       width: 100%;
-      max-width: 600px;
+      max-width: 540px;
       position: relative;
       z-index: 10;
+      padding: 40px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04);
     }
 
     .vm-header {
-      background: #121212;
-      padding: 24px 28px;
-      position: relative;
-      overflow: hidden;
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      background: transparent;
+      padding: 0;
     }
 
-    .vm-header::before {
-      content: '';
-      position: absolute;
-      bottom: -20px;
-      left: -20px;
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 178, 0, 0.15), transparent 70%);
-      pointer-events: none;
-    }
-
+    .vm-header::before,
     .vm-header::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(255, 178, 0, 0.55), rgba(4, 130, 255, 0.3), transparent);
+      display: none;
     }
 
     .vm-logo {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
-      font-size: 16px;
-      letter-spacing: -0.04em;
-      color: #fff;
-    }
-
-    .vm-logo span {
-      color: #FFB200;
+      font-size: 14px;
+      letter-spacing: -0.02em;
+      color: #111;
+      text-transform: uppercase;
     }
 
     .vm-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border-radius: 100px;
-      padding: 3px 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid #E8E8E1;
+    }
+
+    .vm-badge.paid {
+      color: #00BE43;
+      border-color: #00BE43;
+      background: transparent;
+    }
+
+    .vm-badge.unpaid {
+      color: #888;
+      border-color: #E8E8E1;
+      background: transparent;
+    }
+
+    .vm-body {
+      padding: 0;
+      background: transparent;
+    }
+
+    .vm-section-title {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .vm-badge.paid {
-      background: rgba(0, 190, 67, 0.15);
-      border: 1px solid rgba(0, 190, 67, 0.35);
-      color: #00BE43;
-    }
-
-    .vm-badge.unpaid {
-      background: rgba(255, 178, 0, 0.15);
-      border: 1px solid rgba(255, 178, 0, 0.35);
-      color: #FFB200;
-    }
-
-    .vm-badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      animation: vm-pulse 1.8s ease-in-out infinite;
-    }
-
-    .vm-badge.paid .vm-badge-dot {
-      background: #00BE43;
-    }
-
-    .vm-badge.unpaid .vm-badge-dot {
-      background: #FFB200;
-    }
-
-    @keyframes vm-pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: .5;
-      }
-    }
-
-    .vm-body {
-      padding: 24px 28px;
-      background: #FFFFFF;
-      display: flex;
-      flex-direction: column;
+      letter-spacing: 0.2em;
+      color: #888;
+      margin-bottom: 24px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #F0F0EB;
     }
 
     .vm-row {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 12px 0;
-      border-bottom: 1px solid #D7D7D0;
+      flex-direction: column;
+      gap: 4px;
+      padding: 16px 0;
+      border-bottom: 1px solid #F0F0EB;
     }
 
     .vm-row:last-of-type {
@@ -241,134 +208,62 @@
 
     .vm-label {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
-      font-weight: 700;
+      font-size: 8px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #5B5B5B;
-      flex-shrink: 0;
+      letter-spacing: 0.1em;
+      color: #888;
     }
 
     .vm-val {
-      font-family: 'IBM Plex Mono', monospace;
+      font-family: 'Inter', sans-serif;
       font-size: 13px;
-      font-weight: 600;
-      color: #111111;
-      text-align: right;
-      max-width: 65%;
-      word-break: break-all;
-    }
-
-    .vm-val.sm {
-      font-size: 11px;
-      font-weight: 400;
-      color: #5B5B5B;
+      font-weight: 500;
+      color: #111;
+      text-align: left;
+      max-width: 100%;
     }
 
     .vm-amount-block {
-      margin: 12px 0 8px;
-      padding: 20px 22px;
-      background: rgba(4, 130, 255, 0.05);
-      border: 1px solid rgba(4, 130, 255, 0.2);
-      border-radius: 18px;
+      margin: 40px 0;
+      padding: 0;
+      background: transparent;
+      border: none;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .vm-amount-label {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
-      font-weight: 700;
+      font-size: 8px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #0482FF;
-      margin-bottom: 6px;
+      letter-spacing: 0.1em;
+      color: #888;
     }
 
     .vm-amount-value {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 30px;
+      font-size: 36px;
       font-weight: 700;
-      color: #111111;
-      letter-spacing: -0.02em;
-      line-height: 1;
+      color: #111;
+      letter-spacing: -0.03em;
     }
 
-    .vm-desc-block {
-      margin-top: 4px;
-      padding: 14px 18px;
-      background: #F2F2EE;
-      border: 1px solid #D7D7D0;
-      border-radius: 14px;
-    }
-
-    .vm-desc-title {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #5B5B5B;
-      margin-bottom: 7px;
-    }
-
-    .vm-desc-text {
-      font-family: 'Inter', sans-serif;
-      font-size: 12px;
-      color: #5B5B5B;
-      line-height: 1.6;
-    }
-
-    .vm-meta-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .vm-meta-tile {
-      padding: 13px 15px;
-      border-radius: 14px;
-      border: 1px solid #D7D7D0;
-      background: #F2F2EE;
-    }
-
-    .vm-meta-tile.blue {
-      background: rgba(4, 130, 255, 0.05);
-      border-color: rgba(4, 130, 255, 0.2);
-    }
-
-    .vm-meta-tile-label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #5B5B5B;
-      margin-bottom: 5px;
-    }
-
-    .vm-meta-tile.blue .vm-meta-tile-label {
-      color: #0482FF;
-    }
-
-    .vm-meta-tile-val {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      font-weight: 600;
-      color: #111111;
-      word-break: break-all;
+    .vm-divider {
+      height: 1px;
+      background: #F0F0EB;
+      margin: 40px 0;
     }
 
     .vm-footer {
-      padding: 16px 28px;
-      border-top: 1px solid #D7D7D0;
-      background: #F2F2EE;
+      padding: 24px 0 0;
+      border-top: 1px solid #F0F0EB;
+      background: transparent;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      align-items: center;
     }
 
     .vm-btn-close {
@@ -461,62 +356,73 @@
     <aside id="sidebar" class="bg-[#EFEFEA] border-r border-border overflow-y-auto hidden md:flex flex-col shrink-0">
       <div class="py-6 flex flex-col gap-8 flex-1">
 
-      <!-- Nav Group -->
-      <div class="transition-all">
-        <h4 class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
-          <span class="full-label">Dashboard</span>
-          <span class="short-label">DAS</span>
-        </h4>
-        <nav class="flex flex-col">
-          <a href="dashboard.html"
-            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-            <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
-                </path>
-              </svg></span>
-            <span class="nav-label">Overview</span>
-          </a>
-          <a href="invoices.html"
-            class="nav-active flex items-center px-6 py-3 text-sm font-semibold text-text bg-white border-l-[3px] border-amber relative">
-            <span class="mr-3 text-amber"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                </path>
-              </svg></span>
-            <span class="nav-label">Invoices</span>
-          </a>
-          <a href="create-invoice.html"
-            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-            <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-              </svg></span>
-            <span class="nav-label">Create Invoice</span>
-          </a>
-        </nav>
-      </div>
+        <!-- Nav Group -->
+        <div class="transition-all">
+          <h4
+            class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
+            <span class="full-label">Dashboard</span>
+            <span class="short-label">DAS</span>
+          </h4>
+          <nav class="flex flex-col">
+            <a href="dashboard.html"
+              class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                  </path>
+                </svg></span>
+              <span class="nav-label">Overview</span>
+            </a>
+            <a href="invoices.html"
+              class="nav-active flex items-center px-6 py-3 text-sm font-semibold text-text bg-white border-l-[3px] border-amber relative">
+              <span class="mr-3 text-amber"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                  </path>
+                </svg></span>
+              <span class="nav-label">Invoices</span>
+            </a>
+            <a href="clients.html"
+              class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                  </path>
+                </svg></span>
+              <span class="nav-label">Clients</span>
+            </a>
+            <a href="create-invoice.html"
+              class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg></span>
+              <span class="nav-label">Create Invoice</span>
+            </a>
+          </nav>
+        </div>
 
-      <!-- Environment Group -->
-      <div>
-        <h4 class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
-          <span class="full-label">Environment</span>
-          <span class="short-label">ENV</span>
-        </h4>
-        <nav class="flex flex-col">
-          <a href="settings.html"
-            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-            <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                </path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg></span>
-            <span class="nav-label">Settings</span>
-          </a>
-        </nav>
+        <!-- Environment Group -->
+        <div>
+          <h4
+            class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
+            <span class="full-label">Environment</span>
+            <span class="short-label">ENV</span>
+          </h4>
+          <nav class="flex flex-col">
+            <a href="settings.html"
+              class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                  </path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg></span>
+              <span class="nav-label">Settings</span>
+            </a>
+          </nav>
 
-      </div>
+        </div>
 
       </div>
 
@@ -525,57 +431,61 @@
 
 
 
-  <!-- Main Content -->
-  <main class="flex-1 p-8 lg:p-12 overflow-y-auto bg-card">
-    <header class="flex justify-between items-end mb-8 border-b border-border pb-6">
-      <div>
-        <h1 class="font-heading font-bold text-3xl text-text mb-2">Invoices</h1>
-        <p class="text-sm text-muted">Manage, track, and update all your invoices.</p>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="hidden md:flex border border-border rounded-lg bg-bg p-1" id="filter-bar">
-          <button data-filter="all" onclick="setFilter(this,'all')"
-            class="filter-btn px-3 py-1 text-xs font-semibold rounded bg-white shadow-sm border border-border text-text">All</button>
-          <button data-filter="1" onclick="setFilter(this,'1')"
-            class="filter-btn px-3 py-1 text-xs font-semibold text-muted hover:text-text transition-colors">24h</button>
-          <button data-filter="7" onclick="setFilter(this,'7')"
-            class="filter-btn px-3 py-1 text-xs font-semibold text-muted hover:text-text transition-colors">7 days</button>
-          <button data-filter="30" onclick="setFilter(this,'30')"
-            class="filter-btn px-3 py-1 text-xs font-semibold text-muted hover:text-text transition-colors">30 days</button>
+    <!-- Main Content -->
+    <main class="flex-1 p-8 lg:p-12 overflow-y-auto bg-card">
+      <header class="flex justify-between items-end mb-8 border-b border-border pb-6">
+        <div>
+          <h1 class="font-heading font-bold text-3xl text-text mb-2">Invoices</h1>
+          <p class="text-sm text-muted">Manage, track, and update all your invoices.</p>
         </div>
-        <a href="create-invoice.html"
-          class="px-5 py-2.5 bg-text text-white rounded-full text-xs font-mono font-bold uppercase tracking-widest hover:bg-muted transition-colors shadow-sm">
-          New Invoice
-        </a>
-      </div>
-    </header>
+        <div class="flex items-center gap-4">
+          <div class="hidden md:flex border border-border rounded-lg bg-bg p-1" id="filter-bar">
+            <button data-filter="all" onclick="setFilter(this,'all')"
+              class="filter-btn px-3 py-1 text-xs font-semibold rounded bg-white shadow-sm border border-border text-text">All</button>
+            <button data-filter="1" onclick="setFilter(this,'1')"
+              class="filter-btn px-3 py-1 text-xs font-semibold text-muted hover:text-text transition-colors">24h</button>
+            <button data-filter="7" onclick="setFilter(this,'7')"
+              class="filter-btn px-3 py-1 text-xs font-semibold text-muted hover:text-text transition-colors">7
+              days</button>
+            <button data-filter="30" onclick="setFilter(this,'30')"
+              class="filter-btn px-3 py-1 text-xs font-semibold text-muted hover:text-text transition-colors">30
+              days</button>
+          </div>
+          <a href="create-invoice.html"
+            class="px-5 py-2.5 bg-text text-white rounded-full text-xs font-mono font-bold uppercase tracking-widest hover:bg-muted transition-colors shadow-sm">
+            New Invoice
+          </a>
+        </div>
+      </header>
 
-    <div class="bg-white border border-border rounded-2xl shadow-soft overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse min-w-[800px]">
-          <thead class="bg-bg border-b border-border">
-            <tr>
-              <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Client
-              </th>
-              <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Amount
-              </th>
-              <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Due Date
-              </th>
-              <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Status
-              </th>
-              <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider text-center">
-                Last Reminder</th>
-              <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider text-right">
-                Actions</th>
-            </tr>
-          </thead>
-          <tbody id="invoices-tbody" class="divide-y divide-border">
-            <!-- Loaded via JS -->
-          </tbody>
-        </table>
+      <div class="bg-white border border-border rounded-2xl shadow-soft overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse min-w-[800px]">
+            <thead class="bg-bg border-b border-border">
+              <tr>
+                <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Client
+                </th>
+                <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Amount
+                </th>
+                <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Due Date
+                </th>
+                <th class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Status
+                </th>
+                <th
+                  class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider text-center">
+                  Last Reminder</th>
+                <th
+                  class="px-6 py-4 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider text-right">
+                  Actions</th>
+              </tr>
+            </thead>
+            <tbody id="invoices-tbody" class="divide-y divide-border">
+              <!-- Loaded via JS -->
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
   </div>
 
   <!-- Edit Modal -->
@@ -648,48 +558,26 @@
 
   <!-- View Modal -->
   <div id="view-modal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity" onclick="toggleViewModal()"></div>
+    <div class="absolute inset-0 bg-[#888888]/70 backdrop-blur-sm transition-opacity" onclick="toggleViewModal()"></div>
     <div class="vm-card">
-
-      <!-- Header -->
       <div class="vm-header">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
-          <div class="vm-logo">CHASE<span>PAY</span></div>
-          <button onclick="toggleViewModal()"
-            style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 0.15s;"
-            onmouseover="this.style.background='rgba(255,255,255,0.14)'"
-            onmouseout="this.style.background='rgba(255,255,255,0.07)'">
-            <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.7)" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <div
-          style="color:rgba(255,255,255,0.38); font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:4px;">
-          Invoice Details</div>
-        <div style="display:flex; align-items:center; justify-content:space-between;">
-          <div
-            style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:22px; color:#fff; letter-spacing:-0.02em;"
-            id="view-invoice-num">Loading...</div>
-          <div id="view-status-badge" class="vm-badge unpaid"><span class="vm-badge-dot"></span><span
-              id="view-status-text">UNPAID</span></div>
-        </div>
+        <div class="vm-logo">CHASEPAY</div>
+        <div id="view-status-badge" class="vm-badge unpaid">UNPAID</div>
       </div>
 
-      <!-- Body -->
-      <div class="vm-body">
-        <div id="view-details"><!-- JS fills this --></div>
+      <div class="vm-section-title">Invoice Details</div>
+
+      <div class="vm-body" id="view-details">
+        <!-- JS fills this -->
       </div>
 
-      <!-- Footer -->
       <div class="vm-footer">
-        <span class="vm-footer-tag">chasepay · invoice engine</span>
-        <div style="display:flex; gap:10px;">
+        <div style="display:flex; gap:12px;">
           <button type="button" onclick="toggleViewModal()" class="vm-btn-close">Close</button>
           <button type="button" id="view-edit-btn" class="vm-btn-edit">Edit Invoice</button>
         </div>
+        <span class="vm-footer-tag">© ChasePay Inc.</span>
       </div>
-
     </div>
   </div>
 
@@ -770,7 +658,6 @@
 
     function setFilter(btn, period) {
       activeFilter = period;
-      // Update button styles
       document.querySelectorAll('.filter-btn').forEach(b => {
         b.classList.remove('bg-white', 'shadow-sm', 'border', 'border-border', 'text-text', 'border-amber', 'text-amber');
         b.classList.add('text-muted');
@@ -778,7 +665,6 @@
       btn.classList.remove('text-muted');
       btn.classList.add('bg-white', 'shadow-sm', 'border', 'border-amber', 'text-amber');
 
-      // Filter invoices by due_date window
       let filtered = currentInvoices;
       if (period !== 'all') {
         const days = parseInt(period);
@@ -794,10 +680,10 @@
     }
 
     async function loadInvoices() {
-      const invoices = await fetchWithAuth('/invoices/');
-      if (invoices) {
-        currentInvoices = invoices;
-        renderInvoices(invoices);
+      const data = await fetchWithAuth('/invoices/');
+      if (data && Array.isArray(data)) {
+        currentInvoices = data;
+        renderInvoices(data);
       }
     }
 
@@ -814,31 +700,26 @@
       const inv = currentInvoices.find(i => i.id === id);
       if (!inv) return;
 
-      // Header – invoice number & status badge
-      document.getElementById('view-invoice-num').textContent = inv.invoice_number || 'INV-0000';
       const badge = document.getElementById('view-status-badge');
-      badge.className = `vm-badge ${inv.status === 'paid' ? 'paid' : 'unpaid'}`;
-      document.getElementById('view-status-text').textContent = inv.status.toUpperCase();
-
-      // Edit button wiring
-      document.getElementById('view-edit-btn').onclick = () => {
-        toggleViewModal();
-        setTimeout(() => openEditModal(id), 300);
-      };
+      badge.textContent = inv.status.toUpperCase();
+      badge.className = `vm-badge ${inv.status}`;
 
       const sym = inv.currency === 'INR' ? '₹' : inv.currency === 'EUR' ? '€' : inv.currency === 'GBP' ? '£' : '$';
       const dueFmt = new Date(inv.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       const invDateFmt = inv.invoice_date ? new Date(inv.invoice_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
 
       document.getElementById('view-details').innerHTML = `
-        <!-- Client rows -->
+        <div class="vm-row">
+          <span class="vm-label">Reference</span>
+          <span class="vm-val font-mono">${inv.invoice_number || 'N/A'}</span>
+        </div>
         <div class="vm-row">
           <span class="vm-label">Client</span>
           <span class="vm-val">${inv.client_name}</span>
         </div>
         <div class="vm-row">
           <span class="vm-label">Email</span>
-          <span class="vm-val sm">${inv.client_email}</span>
+          <span class="vm-val">${inv.client_email}</span>
         </div>
         <div class="vm-row">
           <span class="vm-label">Invoice Date</span>
@@ -848,36 +729,22 @@
           <span class="vm-label">Due Date</span>
           <span class="vm-val">${dueFmt}</span>
         </div>
-
-        <!-- Amount block -->
+        
         <div class="vm-amount-block">
-          <div>
-            <div class="vm-amount-label">Total Amount</div>
-            <div class="vm-amount-value">${sym}${inv.amount.toLocaleString()}</div>
-          </div>
-          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" style="opacity:0.22;">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93V18c0-.55-.45-1-1-1s-1 .45-1 1v1.93C7.06 19.44 4.56 16.94 4.07 14H6c.55 0 1-.45 1-1s-.45-1-1-1H4.07C4.56 8.06 7.06 5.56 10 5.07V7c0 .55.45 1 1 1s1-.45 1-1V5.07C16.94 5.56 19.44 8.06 19.93 11H18c-.55 0-1 .45-1 1s.45 1 1 1h1.93c-.49 2.94-2.99 5.44-5.93 5.93z" fill="#60a5fa"/>
-          </svg>
+          <span class="vm-amount-label">Total Balance</span>
+          <span class="vm-amount-value">${sym}${inv.amount.toLocaleString()}</span>
         </div>
 
-        <!-- Description -->
-        <div class="vm-desc-block">
-          <div class="vm-desc-title">Service Description</div>
-          <div class="vm-desc-text">${inv.description || '<span style="color:#5B5B5B; font-style:italic;">No description provided</span>'}</div>
-        </div>
-
-        <!-- Meta grid -->
-        <div class="vm-meta-grid">
-          <div class="vm-meta-tile blue">
-            <div class="vm-meta-tile-label">Automated Reminders</div>
-            <div class="vm-meta-tile-val">${inv.last_reminder ? inv.last_reminder + ' sent' : 'Scheduled'}</div>
-          </div>
-          <div class="vm-meta-tile">
-            <div class="vm-meta-tile-label">Reference ID</div>
-            <div class="vm-meta-tile-val" title="${inv.id}">${inv.id.substring(0, 14)}…</div>
-          </div>
-        </div>
+        ${inv.description ? `
+          <div class="vm-section-title" style="margin-top:24px;">Description</div>
+          <p style="font-size:12px; color:#5B5B5B; line-height:1.6; margin-top:-12px;">${inv.description}</p>
+        ` : ''}
       `;
+
+      document.getElementById('view-edit-btn').onclick = () => {
+        toggleViewModal();
+        openEditModal(inv.id);
+      };
 
       toggleViewModal();
     }

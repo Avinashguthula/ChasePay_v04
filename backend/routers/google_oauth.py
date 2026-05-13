@@ -58,3 +58,13 @@ async def google_callback(code: str, state: str):
     
     # Redirect back to frontend settings
     return RedirectResponse(url="http://localhost:8000/settings?connected=true")
+
+@router.post("/disconnect")
+async def google_disconnect(user: dict = Depends(get_current_user)):
+    user_id = user['id']
+    supabase_admin.table("users").update({
+        "gmail_connected": False,
+        "gmail_access_token": None,
+        "gmail_refresh_token": None,
+    }).eq("id", user_id).execute()
+    return {"status": "success", "message": "Gmail disconnected"}

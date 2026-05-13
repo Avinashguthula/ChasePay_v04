@@ -13,6 +13,13 @@ async def process_overdue_invoices():
     print(f"DEBUG: Found {len(invoices)} unpaid invoices.")
     
     for inv in invoices:
+        # Check if user has paused reminders
+        user_res = supabase_admin.table("users").select("*").eq("id", inv["user_id"]).single().execute()
+        user_data = user_res.data
+        if user_data.get("reminders_paused"):
+            print(f"DEBUG: Reminders paused for user {inv['user_id']}. Skipping invoice {inv['id']}")
+            continue
+
         due_date = datetime.strptime(inv["due_date"], "%Y-%m-%d").date()
         days_overdue = (today - due_date).days
         print(f"DEBUG: Invoice {inv['id']} for {inv['client_name']} is {days_overdue} days overdue.")
@@ -29,9 +36,12 @@ async def process_overdue_invoices():
             # Check if reminder already sent
             existing = supabase_admin.table("reminders").select("*").eq("invoice_id", inv["id"]).eq("type", reminder_type).execute()
             if not existing.data:
-                # Generate AI email with a fallback template
                 try:
-                    # Generate AI email with a fallback template
+                    # Fetch user info for branding (already fetched above)
+                    user_name = f"{user_data.get('first_name', '')} {user_data.get('last_name', '')}".strip() or user_data.get("email", "Your Billing Team")
+                    plan = user_data.get("plan", "free")
+
+                    # Generate AI email with branding
                     try:
                         email_content = generate_reminder_email(
                             inv["client_name"], 
@@ -39,8 +49,10 @@ async def process_overdue_invoices():
                             inv["currency"], 
                             days_overdue, 
                             reminder_type,
+                            user_data,
                             inv.get("description")
                         )
+
                         # Split subject and body
                         lines = email_content.split("\n")
                         subject = lines[0].replace("Subject: ", "")
@@ -52,7 +64,8 @@ async def process_overdue_invoices():
                     
                     # Send email
                     print(f"DEBUG: Sending email via unified service...")
-                    success = await send_email_unified(inv["user_id"], inv["client_email"], subject, body)
+                    sender_name = user_name if plan == "agency" else "ChasePay"
+                    success = await send_email_unified(inv["user_id"], inv["client_email"], subject, body, sender_name=sender_name)
                     
                     if success:
                         # Log reminder in reminders table

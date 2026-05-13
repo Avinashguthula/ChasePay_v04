@@ -7,13 +7,18 @@ from pydantic import BaseModel
 router = APIRouter(prefix="/clients", tags=["Clients"])
 
 class ClientCreate(BaseModel):
-    name: str
+    company_name: str
+    contact_name: str | None = None
     email: str
+    phone: str | None = None
+    address: str | None = None
+    relationship: str | None = "Regular Client"
+    notes: str | None = None
 
 @router.get("/")
 async def get_clients(user: dict = Depends(get_current_user)):
     supabase = get_supabase_client(user["token"])
-    response = supabase.table("clients").select("*").execute()
+    response = supabase.table("clients").select("*").order("created_at", desc=True).execute()
     return response.data
 
 @router.post("/")
@@ -31,12 +36,19 @@ async def create_client(client_data: ClientCreate, user: dict = Depends(get_curr
     if current_count >= limit:
         raise HTTPException(status_code=403, detail=f"Client limit reached for {user_plan} plan. Upgrade to add more.")
     
-    data = {
-        "user_id": user["id"],
-        "name": client_data.name,
-        "email": client_data.email
-    }
+    data = client_data.dict()
+    data["user_id"] = user["id"]
+    
     response = supabase.table("clients").insert(data).execute()
+    return response.data[0]
+
+@router.put("/{client_id}")
+async def update_client(client_id: str, client_data: ClientCreate, user: dict = Depends(get_current_user)):
+    supabase = get_supabase_client(user["token"])
+    data = client_data.dict()
+    response = supabase.table("clients").update(data).eq("id", client_id).execute()
+    if not response.data:
+        raise HTTPException(status_code=404, detail="Client not found")
     return response.data[0]
 
 @router.delete("/{client_id}")
@@ -44,3 +56,4 @@ async def delete_client(client_id: str, user: dict = Depends(get_current_user)):
     supabase = get_supabase_client(user["token"])
     response = supabase.table("clients").delete().eq("id", client_id).execute()
     return {"message": "Client deleted"}
+
