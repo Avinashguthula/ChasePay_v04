@@ -24,7 +24,8 @@ async def get_current_user(auth: HTTPAuthorizationCredentials = Security(securit
             "email": user.email,
             "token": token,
             "plan": profile.data.get("plan", "free") if profile.data else "free",
-            "gmail_connected": profile.data.get("gmail_connected", False) if profile.data else False
+            "gmail_connected": profile.data.get("gmail_connected", False) if profile.data else False,
+            "last_name": profile.data.get("last_name", "") if profile.data else ""
         }
     except Exception as e:
         error_msg = str(e).lower()

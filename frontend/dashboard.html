@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,162 +8,326 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/tailwind-config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
       background-color: theme('colors.bg');
       color: theme('colors.text');
     }
-    h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Space Grotesk', sans-serif; }
-    .font-mono { font-family: 'IBM Plex Mono', monospace; }
+
+    /* ── Sidebar (Hover-to-Expand) ── */
+    aside {
+      width: 84px !important;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      height: calc(100vh - 64px) !important;
+      min-height: calc(100vh - 64px) !important;
+      position: sticky;
+      top: 0;
+      overflow-x: hidden;
+      z-index: 40;
+      background-color: #EFEFEA;
+    }
+    aside:hover {
+      width: 260px !important;
+    }
+
+    .nav-label, .full-label {
+      opacity: 0;
+      max-width: 0;
+      visibility: hidden;
+      white-space: nowrap;
+      transition: opacity 0.3s ease, max-width 0.3s ease, transform 0.3s ease, visibility 0.3s;
+      transform: translateX(-10px);
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    aside:hover .nav-label,
+    aside:hover .full-label {
+      opacity: 1;
+      max-width: 200px;
+      visibility: visible;
+      transform: translateX(0);
+    }
+
+    .short-label {
+      display: inline-block;
+      opacity: 0.6;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      transition: all 0.3s ease;
+      max-width: 50px;
+    }
+
+    aside:hover .short-label {
+      opacity: 0;
+      max-width: 0;
+      overflow: hidden;
+      margin-right: 0;
+    }
+    
+    aside nav a {
+      justify-content: flex-start;
+      padding-left: 30px !important; /* Centers the 24px icon in 84px sidebar */
+      transition: background 0.2s ease, padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), border 0.2s ease;
+    }
+
+    aside:hover nav a {
+      padding-left: 24px !important;
+    }
+
+    /* Active Link Fixes */
+    .nav-active {
+      background: #FFFFFF !important;
+      border-left: 3px solid var(--accent-color, #FFB200) !important;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+    }
+    .nav-active span {
+      color: var(--accent-color, #FFB200) !important;
+      opacity: 1 !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .font-mono {
+      font-family: 'IBM Plex Mono', monospace;
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+
+<body class="h-screen flex flex-col overflow-hidden">
 
   <!-- Top Navbar (Dark) -->
-  <header class="bg-dark text-white h-14 flex items-center justify-between px-6 sticky top-0 z-50">
+  <header class="bg-dark text-white h-16 flex items-center justify-between px-6 sticky top-0 z-50">
     <div class="flex items-center gap-6">
       <a href="dashboard.html" class="font-heading font-bold text-xl tracking-tighter text-white">
         CHASE<span class="text-amber">PAY</span>
       </a>
       <div class="hidden md:flex items-center gap-4 text-xs font-mono font-medium text-gray-400">
-        <a href="#" class="hover:text-white transition-colors flex items-center gap-1">Org <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>
+        <a href="#" class="hover:text-white transition-colors flex items-center gap-1">Org <svg class="w-3 h-3"
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg></a>
         <span class="text-gray-600">/</span>
-        <a href="#" class="hover:text-white transition-colors flex items-center gap-1">Workspace <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>
+        <a href="#" class="hover:text-white transition-colors flex items-center gap-1">Workspace <svg class="w-3 h-3"
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg></a>
       </div>
     </div>
     <div class="flex items-center gap-4 text-xs font-mono font-medium text-gray-400">
       <a href="#" class="hover:text-white transition-colors">Feedback</a>
-      <button class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center hover:text-white hover:border-white transition-colors">?</button>
-      <button onclick="logout()" class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center hover:text-red hover:border-red transition-colors" title="Logout">
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+      <button
+        class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center hover:text-white hover:border-white transition-colors">?</button>
+      <button onclick="logout()"
+        class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center hover:text-red hover:border-red transition-colors"
+        title="Logout">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+        </svg>
       </button>
     </div>
   </header>
 
   <div class="flex flex-1 overflow-hidden">
     <!-- Left Sidebar -->
-    <aside class="w-60 bg-[#EFEFEA] border-r border-border h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto hidden md:block">
-      <div class="py-6 flex flex-col gap-8">
-        
-        <!-- Nav Group -->
-        <div>
-          <h4 class="px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold">Billing</h4>
-          <nav class="flex flex-col">
-            <a href="dashboard.html" class="flex items-center px-6 py-2.5 text-sm font-medium text-text bg-white/50 border-l-[3px] border-amber relative">
-              <span class="mr-3 text-amber"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></span>
-              Overview
-            </a>
-            <a href="invoices.html" class="flex items-center px-6 py-2.5 text-sm font-medium text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-              <span class="mr-3 opacity-60"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></span>
-              Invoices
-            </a>
-            <a href="create-invoice.html" class="flex items-center px-6 py-2.5 text-sm font-medium text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-              <span class="mr-3 opacity-60"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg></span>
-              Create Invoice
-            </a>
-          </nav>
-        </div>
+    <aside id="sidebar" class="bg-[#EFEFEA] border-r border-border overflow-y-auto hidden md:flex flex-col shrink-0">
+      <div class="py-6 flex flex-col gap-8 flex-1">
 
-        <!-- Environment Group -->
-        <div>
-          <h4 class="px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold">Environment</h4>
-          <nav class="flex flex-col">
-            <a href="settings.html" class="flex items-center px-6 py-2.5 text-sm font-medium text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-              <span class="mr-3 opacity-60"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></span>
-              Settings
-            </a>
-          </nav>
-        </div>
+      <!-- Nav Group -->
+      <div>
+        <h4 class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
+          <span class="full-label">Dashboard</span>
+          <span class="short-label">DAS</span>
+        </h4>
+        <nav class="flex flex-col">
+          <a href="dashboard.html"
+            class="nav-active flex items-center px-6 py-3 text-sm font-semibold text-text bg-white border-l-[3px] border-amber relative">
+            <span class="mr-3 text-amber"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                </path>
+              </svg></span>
+            <span class="nav-label">Overview</span>
+          </a>
+          <a href="invoices.html"
+            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+            <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                </path>
+              </svg></span>
+            <span class="nav-label">Invoices</span>
+          </a>
+          <a href="create-invoice.html"
+            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+            <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg></span>
+            <span class="nav-label">Create Invoice</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Environment Group -->
+      <div>
+        <h4 class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
+          <span class="full-label">Environment</span>
+          <span class="short-label">ENV</span>
+        </h4>
+        <nav class="flex flex-col">
+          <a href="settings.html"
+            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+            <span class="mr-3 opacity-60"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                </path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg></span>
+            <span class="nav-label">Settings</span>
+          </a>
+        </nav>
+      </div>
+
 
       </div>
+
     </aside>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-8 lg:p-12 overflow-y-auto bg-card">
-      <header class="flex justify-between items-end mb-8 border-b border-border pb-6">
-        <div>
-          <div class="flex items-center gap-3 mb-2">
-            <h1 class="font-heading font-bold text-3xl text-text">Overview</h1>
-            <span class="px-2 py-0.5 rounded border border-green text-green text-[10px] font-mono font-bold uppercase">Live</span>
-          </div>
-          <p class="text-sm text-muted">Here's what's happening with your invoices today.</p>
-        </div>
-        <div class="flex items-center gap-4">
-          <div class="hidden md:flex border border-border rounded-lg bg-bg p-1">
-            <button class="px-3 py-1 text-xs font-semibold rounded bg-white shadow-sm border border-border">Last 24 hours</button>
-            <button class="px-3 py-1 text-xs font-semibold text-muted hover:text-text transition-colors">7 days</button>
-            <button class="px-3 py-1 text-xs font-semibold text-muted hover:text-text transition-colors">30 days</button>
-          </div>
-          <a href="create-invoice.html" class="px-5 py-2.5 bg-text text-white rounded-full text-xs font-mono font-bold uppercase tracking-widest hover:bg-muted transition-colors shadow-sm">
-            New Invoice
-          </a>
-        </div>
-      </header>
 
-      <!-- Stats Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-px bg-border border border-border rounded-2xl overflow-hidden mb-12 shadow-sm">
-        
-        <div class="bg-white p-6 hover:bg-bg transition-colors">
-          <p class="text-xs font-mono font-semibold text-muted uppercase mb-3">Total Invoices</p>
-          <h3 class="font-heading font-bold text-4xl text-text" id="stat-total">0</h3>
-        </div>
 
-        <div class="bg-white p-6 hover:bg-bg transition-colors">
-          <p class="text-xs font-mono font-semibold text-green uppercase mb-3">Paid</p>
-          <h3 class="font-heading font-bold text-4xl text-green" id="stat-paid">0</h3>
+  <!-- Main Content -->
+  <main class="flex-1 p-8 lg:p-12 overflow-y-auto bg-card">
+    <header class="flex justify-between items-end mb-8 border-b border-border pb-6">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <h1 class="font-heading font-bold text-3xl text-text leading-none">
+            <span class="text-muted/60">Good</span> <span id="greeting-time" class="text-muted/60">morning</span>,
+            <span id="user-lastname" class="text-pink">User</span>
+          </h1>
+          <span
+            class="px-2 py-0.5 rounded border border-green text-green text-[10px] font-mono font-bold uppercase">Live</span>
         </div>
+        <p class="text-sm text-muted font-medium" id="dashboard-subtitle">Loading status...</p>
+      </div>
+      <div>
+        <a href="create-invoice.html"
+          class="px-5 py-2.5 bg-text text-white rounded-full text-xs font-mono font-bold uppercase tracking-widest hover:bg-muted transition-colors shadow-sm">
+          New Invoice
+        </a>
+      </div>
+    </header>
 
-        <div class="bg-white p-6 hover:bg-bg transition-colors">
-          <p class="text-xs font-mono font-semibold text-amber uppercase mb-3">Unpaid</p>
-          <h3 class="font-heading font-bold text-4xl text-amber" id="stat-unpaid">0</h3>
-        </div>
+    <!-- Stats Grid -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-4 gap-px bg-border border border-border rounded-2xl overflow-hidden mb-12 shadow-sm">
 
-        <div class="bg-white p-6 hover:bg-bg transition-colors">
-          <p class="text-xs font-mono font-semibold text-red uppercase mb-3">Overdue</p>
-          <h3 class="font-heading font-bold text-4xl text-red" id="stat-overdue">0</h3>
-        </div>
-
+      <div class="bg-white p-6 hover:bg-bg transition-colors">
+        <p class="text-xs font-mono font-semibold text-muted uppercase mb-3">Total Invoices</p>
+        <h3 class="font-heading font-bold text-4xl text-text" id="stat-total">0</h3>
       </div>
 
-      <!-- Recent Invoices Table -->
-      <div class="mb-6">
-        <div class="flex justify-between items-center mb-4">
-          <h4 class="font-heading font-bold text-lg text-text">Recent Invoices</h4>
-          <a href="invoices.html" class="text-xs font-mono font-bold uppercase text-muted hover:text-text transition-colors">View all &rarr;</a>
-        </div>
-        
-        <div class="bg-white border border-border rounded-xl shadow-sm overflow-hidden">
-          <table class="w-full text-left border-collapse">
-            <thead class="bg-bg border-b border-border">
-              <tr>
-                <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Client</th>
-                <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Amount</th>
-                <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Due Date</th>
-                <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Status</th>
-              </tr>
-            </thead>
-            <tbody id="recent-invoices-tbody" class="divide-y divide-border">
-              <!-- Loaded via JS -->
-            </tbody>
-          </table>
-        </div>
+      <div class="bg-white p-6 hover:bg-bg transition-colors">
+        <p class="text-xs font-mono font-semibold text-green uppercase mb-3">Paid</p>
+        <h3 class="font-heading font-bold text-4xl text-green" id="stat-paid">0</h3>
       </div>
 
-    </main>
+      <div class="bg-white p-6 hover:bg-bg transition-colors">
+        <p class="text-xs font-mono font-semibold text-amber uppercase mb-3">Unpaid</p>
+        <h3 class="font-heading font-bold text-4xl text-amber" id="stat-unpaid">0</h3>
+      </div>
+
+      <div class="bg-white p-6 hover:bg-bg transition-colors">
+        <p class="text-xs font-mono font-semibold text-red uppercase mb-3">Overdue</p>
+        <h3 class="font-heading font-bold text-4xl text-red" id="stat-overdue">0</h3>
+      </div>
+
+    </div>
+
+    <!-- Recent Invoices Table -->
+    <div class="mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h4 class="font-heading font-bold text-lg text-text">Recent Invoices</h4>
+        <a href="invoices.html"
+          class="text-xs font-mono font-bold uppercase text-muted hover:text-text transition-colors">View all
+          &rarr;</a>
+      </div>
+
+      <div class="bg-white border border-border rounded-xl shadow-sm overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-bg border-b border-border">
+            <tr>
+              <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Client
+              </th>
+              <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Amount
+              </th>
+              <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Due Date
+              </th>
+              <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Status
+              </th>
+            </tr>
+          </thead>
+          <tbody id="recent-invoices-tbody" class="divide-y divide-border">
+            <!-- Loaded via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
   </div>
 
   <script src="js/auth.js"></script>
   <script src="js/api.js"></script>
   <script>
     async function loadDashboard() {
+      // Set dynamic greeting and date
+      const now = new Date();
+      const hours = now.getHours();
+      let timeOfDay = "morning";
+      if (hours >= 12 && hours < 17) timeOfDay = "afternoon";
+      else if (hours >= 17) timeOfDay = "evening";
+      document.getElementById('greeting-time').textContent = timeOfDay;
+
+      const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+      const dateString = now.toLocaleDateString('en-GB', options);
+
+      // Get user name from API profile
+      const userProfile = await fetchWithAuth('/users/me');
+      let displayName = 'Developer';
+      if (userProfile) {
+        // Try to get last_name from the profile, fallback to email prefix
+        displayName = userProfile.last_name ||
+          (userProfile.user_metadata && userProfile.user_metadata.last_name) ||
+          (userProfile.email ? userProfile.email.split('@')[0].charAt(0).toUpperCase() + userProfile.email.split('@')[0].slice(1) : 'Developer');
+      }
+      document.getElementById('user-lastname').textContent = displayName;
+
       const stats = await fetchWithAuth('/invoices/stats/summary');
       if (stats) {
         document.getElementById('stat-total').textContent = stats.total;
         document.getElementById('stat-paid').textContent = stats.paid;
         document.getElementById('stat-unpaid').textContent = stats.unpaid;
         document.getElementById('stat-overdue').textContent = stats.overdue;
+
+        // Update subtitle with overdue info
+        const overdue = stats.overdue || 0;
+        const subtitle = document.getElementById('dashboard-subtitle');
+        subtitle.innerHTML = `${dateString} <span class="mx-2 opacity-30">·</span> <span class="${overdue > 0 ? 'text-red font-bold' : ''}">${overdue} ${overdue === 1 ? 'invoice needs' : 'invoices need'} attention</span>`;
       }
 
       const invoices = await fetchWithAuth('/invoices/');
@@ -172,7 +337,7 @@
           <tr class="hover:bg-bg transition-colors">
             <td class="px-6 py-4">
               <p class="font-medium text-sm text-text">${inv.client_name}</p>
-              <p class="text-xs text-muted font-mono mt-1">${inv.client_email}</p>
+              <p class="text-xs text-muted font-mono mt-1">${inv.invoice_number}</p>
             </td>
             <td class="px-6 py-4 font-mono font-medium text-sm text-text">${inv.currency} ${inv.amount}</td>
             <td class="px-6 py-4 text-sm text-muted">${new Date(inv.due_date).toLocaleDateString()}</td>
@@ -183,7 +348,7 @@
             </td>
           </tr>
         `).join('');
-        
+
         if (invoices.length === 0) {
           tbody.innerHTML = `
             <tr>
@@ -201,4 +366,5 @@
     loadDashboard();
   </script>
 </body>
+
 </html>
