@@ -30,11 +30,13 @@
       z-index: 40;
       background-color: #EFEFEA;
     }
+
     aside:hover {
       width: 260px !important;
     }
 
-    .nav-label, .full-label {
+    .nav-label,
+    .full-label {
       opacity: 0;
       max-width: 0;
       visibility: hidden;
@@ -69,10 +71,11 @@
       overflow: hidden;
       margin-right: 0;
     }
-    
+
     aside nav a {
       justify-content: flex-start;
-      padding-left: 30px !important; /* Centers the 24px icon in 84px sidebar */
+      padding-left: 30px !important;
+      /* Centers the 24px icon in 84px sidebar */
       transition: background 0.2s ease, padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), border 0.2s ease;
     }
 
@@ -84,8 +87,9 @@
     .nav-active {
       background: #FFFFFF !important;
       border-left: 3px solid var(--accent-color, #FFB200) !important;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
     }
+
     .nav-active span {
       color: var(--accent-color, #FFB200) !important;
       opacity: 1 !important;
@@ -113,9 +117,8 @@
   <header class="bg-dark text-white h-16 flex items-center justify-between px-6 sticky top-0 z-50">
     <div class="flex items-center gap-6">
       <a href="dashboard.html" class="font-heading font-bold text-xl tracking-tighter text-white">
-        CHASE<span class="text-amber">PAY</span>
-      </a>
-      <div class="hidden md:flex items-center gap-4 text-xs font-mono font-medium text-gray-400">
+        CHASEPAY</a>
+      <div class=" hidden md:flex items-center gap-4 text-xs font-mono font-medium text-gray-400">
         <a href="#" class="hover:text-white transition-colors flex items-center gap-1">Org <svg class="w-3 h-3"
             fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -147,68 +150,72 @@
     <aside id="sidebar" class="bg-[#EFEFEA] border-r border-border overflow-y-auto hidden md:flex flex-col shrink-0">
       <div class="py-6 flex flex-col gap-8 flex-1">
 
-      <!-- Nav Group -->
-      <div>
-        <h4 class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
-          <span class="full-label">Dashboard</span>
-          <span class="short-label">DAS</span>
-        </h4>
-        <nav class="flex flex-col">
-          <a href="dashboard.html"
-            class="nav-active flex items-center px-6 py-3 text-sm font-semibold text-text bg-white border-l-[3px] border-amber relative">
-            <span class="mr-3 text-amber"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
-                </path>
-              </svg></span>
-            <span class="nav-label">Overview</span>
-          </a>
-          <a href="invoices.html"
-            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-            <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                </path>
-              </svg></span>
-            <span class="nav-label">Invoices</span>
-          </a>
-          <a href="clients.html"
-            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-            <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-              </svg></span>
-            <span class="nav-label">Clients</span>
-          </a>
-          <a href="create-invoice.html"
-            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-            <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-              </svg></span>
-            <span class="nav-label">Create Invoice</span>
-          </a>
-        </nav>
-      </div>
+        <!-- Nav Group -->
+        <div>
+          <h4
+            class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
+            <span class="full-label">Dashboard</span>
+            <span class="short-label">DAS</span>
+          </h4>
+          <nav class="flex flex-col">
+            <a href="dashboard.html"
+              class="nav-active flex items-center px-6 py-3 text-sm font-semibold text-text bg-white border-l-[3px] border-amber relative">
+              <span class="mr-3 text-amber"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                  </path>
+                </svg></span>
+              <span class="nav-label">Overview</span>
+            </a>
+            <a href="invoices.html"
+              class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                  </path>
+                </svg></span>
+              <span class="nav-label">Invoices</span>
+            </a>
+            <a href="clients.html"
+              class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                  </path>
+                </svg></span>
+              <span class="nav-label">Clients</span>
+            </a>
+            <a href="create-invoice.html"
+              class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg></span>
+              <span class="nav-label">Create Invoice</span>
+            </a>
+          </nav>
+        </div>
 
-      <!-- Environment Group -->
-      <div>
-        <h4 class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
-          <span class="full-label">Environment</span>
-          <span class="short-label">ENV</span>
-        </h4>
-        <nav class="flex flex-col">
-          <a href="settings.html"
-            class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
-            <span class="mr-3 opacity-60"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                </path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg></span>
-            <span class="nav-label">Settings</span>
-          </a>
-        </nav>
-      </div>
+        <!-- Environment Group -->
+        <div>
+          <h4
+            class="nav-group-header px-6 text-[10px] font-mono uppercase tracking-widest text-muted mb-2 font-bold flex justify-start">
+            <span class="full-label">Environment</span>
+            <span class="short-label">ENV</span>
+          </h4>
+          <nav class="flex flex-col">
+            <a href="settings.html"
+              class="flex items-center px-6 py-3 text-sm font-semibold text-muted hover:text-text hover:bg-white/30 border-l-[3px] border-transparent transition-colors">
+              <span class="mr-3 opacity-60"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                  </path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg></span>
+              <span class="nav-label">Settings</span>
+            </a>
+          </nav>
+        </div>
 
 
       </div>
@@ -217,85 +224,85 @@
 
 
 
-  <!-- Main Content -->
-  <main class="flex-1 p-8 lg:p-12 overflow-y-auto bg-card">
-    <header class="flex justify-between items-end mb-8 border-b border-border pb-6">
-      <div>
-        <div class="flex items-center gap-3 mb-2">
-          <h1 class="font-heading font-bold text-3xl text-text leading-none">
-            <span class="text-muted/60">Good</span> <span id="greeting-time" class="text-muted/60">morning</span>,
-            <span id="user-lastname" class="text-pink">User</span>
-          </h1>
-          <span
-            class="px-2 py-0.5 rounded border border-green text-green text-[10px] font-mono font-bold uppercase">Live</span>
+    <!-- Main Content -->
+    <main class="flex-1 p-8 lg:p-12 overflow-y-auto bg-card">
+      <header class="flex justify-between items-end mb-8 border-b border-border pb-6">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <h1 class="font-heading font-bold text-3xl text-text leading-none">
+              <span class="text-muted/60">Good</span> <span id="greeting-time" class="text-muted/60">morning</span>,
+              <span id="user-lastname" class="text-pink">User</span>
+            </h1>
+            <span
+              class="px-2 py-0.5 rounded border border-green text-green text-[10px] font-mono font-bold uppercase">Live</span>
+          </div>
+          <p class="text-sm text-muted font-medium" id="dashboard-subtitle">Loading status...</p>
         </div>
-        <p class="text-sm text-muted font-medium" id="dashboard-subtitle">Loading status...</p>
-      </div>
-      <div>
-        <a href="create-invoice.html"
-          class="px-5 py-2.5 bg-text text-white rounded-full text-xs font-mono font-bold uppercase tracking-widest hover:bg-muted transition-colors shadow-sm">
-          New Invoice
-        </a>
-      </div>
-    </header>
+        <div>
+          <a href="create-invoice.html"
+            class="px-5 py-2.5 bg-text text-white rounded-full text-xs font-mono font-bold uppercase tracking-widest hover:bg-muted transition-colors shadow-sm">
+            New Invoice
+          </a>
+        </div>
+      </header>
 
-    <!-- Stats Grid -->
-    <div
-      class="grid grid-cols-1 md:grid-cols-4 gap-px bg-border border border-border rounded-2xl overflow-hidden mb-12 shadow-sm">
+      <!-- Stats Grid -->
+      <div
+        class="grid grid-cols-1 md:grid-cols-4 gap-px bg-border border border-border rounded-2xl overflow-hidden mb-12 shadow-sm">
 
-      <div class="bg-white p-6 hover:bg-bg transition-colors">
-        <p class="text-xs font-mono font-semibold text-muted uppercase mb-3">Total Invoices</p>
-        <h3 class="font-heading font-bold text-4xl text-text" id="stat-total">0</h3>
-      </div>
+        <div class="bg-white p-6 hover:bg-bg transition-colors">
+          <p class="text-xs font-mono font-semibold text-muted uppercase mb-3">Total Invoices</p>
+          <h3 class="font-heading font-bold text-4xl text-text" id="stat-total">0</h3>
+        </div>
 
-      <div class="bg-white p-6 hover:bg-bg transition-colors">
-        <p class="text-xs font-mono font-semibold text-green uppercase mb-3">Paid</p>
-        <h3 class="font-heading font-bold text-4xl text-green" id="stat-paid">0</h3>
-      </div>
+        <div class="bg-white p-6 hover:bg-bg transition-colors">
+          <p class="text-xs font-mono font-semibold text-green uppercase mb-3">Paid</p>
+          <h3 class="font-heading font-bold text-4xl text-green" id="stat-paid">0</h3>
+        </div>
 
-      <div class="bg-white p-6 hover:bg-bg transition-colors">
-        <p class="text-xs font-mono font-semibold text-amber uppercase mb-3">Unpaid</p>
-        <h3 class="font-heading font-bold text-4xl text-amber" id="stat-unpaid">0</h3>
-      </div>
+        <div class="bg-white p-6 hover:bg-bg transition-colors">
+          <p class="text-xs font-mono font-semibold text-amber uppercase mb-3">Unpaid</p>
+          <h3 class="font-heading font-bold text-4xl text-amber" id="stat-unpaid">0</h3>
+        </div>
 
-      <div class="bg-white p-6 hover:bg-bg transition-colors">
-        <p class="text-xs font-mono font-semibold text-red uppercase mb-3">Overdue</p>
-        <h3 class="font-heading font-bold text-4xl text-red" id="stat-overdue">0</h3>
-      </div>
+        <div class="bg-white p-6 hover:bg-bg transition-colors">
+          <p class="text-xs font-mono font-semibold text-red uppercase mb-3">Overdue</p>
+          <h3 class="font-heading font-bold text-4xl text-red" id="stat-overdue">0</h3>
+        </div>
 
-    </div>
-
-    <!-- Recent Invoices Table -->
-    <div class="mb-6">
-      <div class="flex justify-between items-center mb-4">
-        <h4 class="font-heading font-bold text-lg text-text">Recent Invoices</h4>
-        <a href="invoices.html"
-          class="text-xs font-mono font-bold uppercase text-muted hover:text-text transition-colors">View all
-          &rarr;</a>
       </div>
 
-      <div class="bg-white border border-border rounded-xl shadow-sm overflow-hidden">
-        <table class="w-full text-left border-collapse">
-          <thead class="bg-bg border-b border-border">
-            <tr>
-              <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Client
-              </th>
-              <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Amount
-              </th>
-              <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Due Date
-              </th>
-              <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Status
-              </th>
-            </tr>
-          </thead>
-          <tbody id="recent-invoices-tbody" class="divide-y divide-border">
-            <!-- Loaded via JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <!-- Recent Invoices Table -->
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h4 class="font-heading font-bold text-lg text-text">Recent Invoices</h4>
+          <a href="invoices.html"
+            class="text-xs font-mono font-bold uppercase text-muted hover:text-text transition-colors">View all
+            &rarr;</a>
+        </div>
 
-  </main>
+        <div class="bg-white border border-border rounded-xl shadow-sm overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-bg border-b border-border">
+              <tr>
+                <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Client
+                </th>
+                <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Amount
+                </th>
+                <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Due Date
+                </th>
+                <th class="px-6 py-3 text-[11px] font-mono font-semibold text-muted uppercase tracking-wider">Status
+                </th>
+              </tr>
+            </thead>
+            <tbody id="recent-invoices-tbody" class="divide-y divide-border">
+              <!-- Loaded via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
   </div>
 
   <script src="js/auth.js"></script>
