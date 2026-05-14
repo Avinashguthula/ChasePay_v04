@@ -5,6 +5,6 @@ import asyncio
 def start_scheduler():
     scheduler = AsyncIOScheduler()
     # Run every 60 seconds for testing
-    scheduler.add_job(process_overdue_invoices, 'interval', seconds=1500)
+    scheduler.add_job(process_overdue_invoices, 'cron', hour=9, minute=0)
     scheduler.start()
-    print("Scheduler started: Checking for overdue invoices every 60 seconds.")
+    print("Scheduler started: Checking for overdue invoices every day at 9 AM.")

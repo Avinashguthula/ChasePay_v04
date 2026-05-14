@@ -11,14 +11,14 @@
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
     rel="stylesheet">
-  <style>
+  <style type="text/tailwindcss">
     body {
       font-family: 'Inter', sans-serif;
       background-color: theme('colors.bg');
       color: theme('colors.text');
       background-image:
-        linear-gradient(to right, rgba(215, 215, 208, 0.5) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(215, 215, 208, 0.5) 1px, transparent 1px);
+        linear-gradient(to right, theme('colors.border') 1px, transparent 1px),
+        linear-gradient(to bottom, theme('colors.border') 1px, transparent 1px);
       background-size: 40px 40px;
     }
 
@@ -35,10 +35,18 @@
     .font-mono {
       font-family: 'IBM Plex Mono', monospace;
     }
+
+    .shadow-soft {
+      box-shadow: 0 4px 40px rgba(0,0,0,0.04);
+    }
+    
+    .shadow-hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
   </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center p-6 relative">
+<body class="min-h-screen flex items-center justify-center p-6 relative selection:bg-orange selection:text-white">
 
   <!-- Mux-style Left Layout Border (visual effect) -->
   <div class="fixed top-0 left-0 w-2 h-full bg-gradient-to-b from-pink via-amber to-blue z-0"></div>
@@ -107,10 +115,15 @@
 
         <!-- Header -->
         <div class="text-center mb-8">
-
-          <a href="index.html" class="inline-block font-heading font-bold text-2xl tracking-tighter text-text mb-4">
-            CHASE<span class="text-amber">PAY</span>
-          </a>
+          <div class="max-w-7xl mx-auto px-6 lg:px-24 h-16 flex items-center justify-between relative z-10">
+            <a href="index.html"
+              class="font-heading font-bold text-xl tracking-tighter text-text flex items-center gap-2">
+              <svg class="w-5 h-5 text-orange" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
+              CHASEPAY
+            </a>
+          </div>
           <h1 class="font-heading text-2xl font-bold mb-1" id="form-title">Log in to your account</h1>
           <p class="text-sm text-muted">
             <span id="form-subtitle">Don't have an account?</span>
@@ -184,7 +197,7 @@
               </div>
             </div>
             <button id="login-btn-final"
-              class="w-full h-12 rounded-full bg-amber text-text font-bold text-sm tracking-wide hover:bg-[#F2A900] transition-colors mt-2 shadow-[0_4px_14px_rgba(255,178,0,0.39)]">
+              class="w-full h-12 rounded-full bg-orange text-white font-bold text-sm tracking-wide hover:bg-[#E55700] transition-colors mt-2 shadow-[0_4px_14px_rgba(255,97,0,0.39)]">
               CONTINUE
             </button>
             <div class="text-center pt-2">
@@ -227,7 +240,7 @@
               </div>
             </div>
             <button id="signup-btn-final"
-              class="w-full h-12 rounded-full bg-amber text-text font-bold text-sm tracking-wide hover:bg-[#F2A900] transition-colors mt-2 shadow-[0_4px_14px_rgba(255,178,0,0.39)]">
+              class="w-full h-12 rounded-full bg-orange text-white font-bold text-sm tracking-wide hover:bg-[#E55700] transition-colors mt-2 shadow-[0_4px_14px_rgba(255,97,0,0.39)]">
               CREATE ACCOUNT
             </button>
             <p class="text-[11px] text-muted text-center pt-2 leading-relaxed">

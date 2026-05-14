@@ -60,7 +60,15 @@ async def process_overdue_invoices():
                     except Exception as ai_err:
                         print(f"AI ERROR (Gemini): {ai_err}. Using fallback template.")
                         subject = f"Payment Reminder: Invoice {inv['invoice_number']}"
-                        body = f"Hi {inv['client_name']},\n\nThis is a friendly reminder regarding invoice {inv['invoice_number']} for {inv['currency']} {inv['amount']} which is {days_overdue} days overdue. Please arrange for payment at your earliest convenience.\n\nBest regards,\nYour Billing Team"
+                        
+                        # Apply basic branding to fallback
+                        signature = f"{user_name}"
+                        if user_data.get("company_name"):
+                            signature += f"\n{user_data['company_name']}"
+                        if plan != "agency":
+                            signature += f"\nPowered by ChasePay"
+
+                        body = f"Hi {inv['client_name']},\n\nThis is a friendly reminder regarding invoice {inv['invoice_number']} for {inv['currency']} {inv['amount']} which is {days_overdue} days overdue. Please arrange for payment at your earliest convenience.\n\nBest regards,\n{signature}"
                     
                     # Send email
                     print(f"DEBUG: Sending email via unified service...")
