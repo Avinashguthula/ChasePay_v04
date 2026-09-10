@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/api";
+const API_URL = "https://chasepay.onrender.com/api";
 
 document.getElementById('login-btn')?.addEventListener('click', async () => {
     const email = document.getElementById('email').value;
@@ -61,7 +61,7 @@ function checkAuth() {
     const token = localStorage.getItem('access_token');
     const publicPages = ['index.html', 'login.html', '/'];
     const isLoginPage = publicPages.some(page => window.location.pathname.endsWith(page));
-    
+
     if (!token && !isLoginPage) {
         window.location.href = 'login.html';
     }
@@ -78,7 +78,7 @@ function handleAuthCallback() {
         if (accessToken) {
             localStorage.setItem('access_token', accessToken);
             if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
-            
+
             // Try to get user info from the fragment if available (though Supabase usually just gives the token)
             // Or just redirect to dashboard and let the dashboard fetch user info
             window.location.hash = ''; // Clear hash
