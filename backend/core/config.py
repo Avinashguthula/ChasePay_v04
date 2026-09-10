@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     # Gemini
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     
+    # Groq
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    
     # Razorpay
     RAZORPAY_KEY_ID: str = os.getenv("RAZORPAY_KEY_ID", "")
     RAZORPAY_KEY_SECRET: str = os.getenv("RAZORPAY_KEY_SECRET", "")

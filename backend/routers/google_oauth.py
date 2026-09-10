@@ -11,13 +11,13 @@ router = APIRouter(prefix="/connect/google", tags=["Google OAuth"])
 async def google_login(user: dict = Depends(get_current_user)):
     # Generate Google Auth URL
     # For MVP, we'll return the URL the frontend should redirect to
-    scopes = "https://www.googleapis.com/auth/gmail.send"
+
     auth_url = (
         f"https://accounts.google.com/o/oauth2/v2/auth?"
         f"client_id={settings.GOOGLE_CLIENT_ID}&"
         f"redirect_uri={settings.GOOGLE_REDIRECT_URI}&"
         f"response_type=code&"
-        f"scope={scopes}&"
+        f"scope=https://www.googleapis.com/auth/gmail.send&"
         f"access_type=offline&"
         f"prompt=consent&"
         f"state={user['id']}"

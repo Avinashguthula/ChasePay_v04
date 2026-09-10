@@ -1,0 +1,97 @@
+Viewed main.py:1-11
+Edited main.py
+
+## Why invoices aren’t being sent
+
+The background job **`process_overdue_invoices`** is being triggered (the scheduler now runs every 30 seconds), but the **email‑sending pipeline** aborts before an email leaves the system. The log excerpt you shared shows three distinct failure points:
+
+| Step | Log message | What it means |
+|------|-------------|----------------|
+| **1️⃣ Resend domain restriction** | `RESEND ERROR: You can only send testing emails to your own email address (guthulaavinash@gmail.com). To send emails to other recipients, please verify a domain at resend.com/domains …` | The free‑plan `FROM_EMAIL` you’ve configured (`onboarding@resend.dev`) is **not a verified domain** in your Resend account. Resend only allows sending to the address that owns the API key when the domain isn’t verified, so every attempt to mail a client is rejected. |
+| **2️⃣ Gmail OAuth token** | `GMAIL ERROR in send_via_gmail: ('invalid_grant: Bad Request', …)` | The stored Gmail access/refresh tokens are no longer valid (they were probably revoked or expired). When the code tries to use Gmail for a Pro/Agency user it raises an exception, and the fallback to Resend still hits the domain‑restriction error. |
+| **3️⃣ AI content generation** | `Gemini API failed: 429 …` and `Client error '401 Unauthorized' for url 'https://api.groq.com/openai/v1/chat/completions'` | Both Gemini (quota exceeded) and Groq (invalid API key) are unable to generate the email body, so the service falls back to a static template. The template itself isn’t the problem—sending still fails because of points 1 & 2. |
+
+Because **`send_email_unified`** now returns `False` when any of the above conditions occur, the caller logs `ERROR: Email service returned False for invoice …` and the invoice reminder is never delivered.
+
+### Summary of the current state
+
+| Component | Status |
+|-----------|--------|
+| **Scheduler** | Running (every 30 s). |
+| **Email routing** | Code correctly decides between Gmail ↔ Resend, but both providers are blocked. |
+| **Resend** | Needs a **verified sending domain** (or you can only send to the address that owns the API key). |
+| **Gmail** | OAuth tokens are invalid; the user must re‑authorize the app. |
+| **AI generation** | Gemini quota exceeded; Groq key is invalid (401). |
+| **Final return logic** | Fixed – now returns `True` only when an email is actually sent. |
+
+## What you need to do to get invoices out
+
+### 1️⃣ Verify a domain with Resend (free‑plan path)
+
+1. Log in to your Resend dashboard.  
+2. Add the domain you want to send from (e.g., `yourcompany.com`).  
+3. Follow the DNS verification steps (add TXT/CNAME records).  
+4. Once the domain shows as **Verified**, change the environment variable `FROM_EMAIL` to an address that belongs to that domain, e.g.:
+
+   ```dotenv
+   FROM_EMAIL=notifications@yourcompany.com
+   ```
+
+5. Restart the server so the new env var is loaded.
+
+*After this, the Resend block will succeed for free‑plan users and you’ll see `DEBUG: Sending via Resend …` followed by `return True` in the logs.*
+
+### 2️⃣ Re‑connect Gmail for Pro/Agency users
+
+1. In the app UI (or an admin page you expose) add a **“Connect Gmail”** button that redirects to the Google OAuth flow (`/auth/google`).  
+2. When the user finishes the flow, store the fresh `gmail_access_token` and `gmail_refresh_token` in the `users` table.  
+3. The next time `send_email_unified` runs, `use_gmail` will be `True` and the Gmail send will succeed.
+
+*If you need a quick manual fix for a specific user, you can clear the existing tokens for that user (set `gmail_connected=False`) and ask the user to reconnect.*
+
+### 3️⃣ Fix the AI‑generation side (optional but recommended)
+
+- **Gemini**: Obtain a paid‑tier API key or increase your quota, then set `GEMINI_API_KEY` in `.env`.  
+- **Groq**: Replace the placeholder key in `.env` (`GROQ_API_KEY=…`) with a valid one from <https://groq.com>.  
+- If you prefer not to rely on external LLMs, you can keep the static fallback template (it already works once the email provider succeeds).
+
+### 4️⃣ Verify the changes
+
+1. **Restart the FastAPI server** (now that the port is free).  
+
+   ```powershell
+   # Make sure the old process is stopped, then:
+   python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
+   ```
+
+2. **Watch the console** after the scheduler fires (you’ll see a line like `DEBUG: Sending via Resend for user …` or `DEBUG: Attempting to send via Gmail …`).  
+3. **Check the recipient inbox** (or the Gmail account you connected) for the invoice reminder.
+
+If you see `return True` in the log and the email appears in the inbox, the pipeline is working.
+
+## Quick next step you can take now
+
+If you want to test the flow immediately **without** configuring a domain, you can temporarily send the invoice to the same address that owns the Resend API key (your own Gmail address). The Resend block will succeed because the “testing‑only” rule is satisfied, and you’ll be able to confirm that the rest of the pipeline (scheduler, template generation, database updates) is functional.
+
+```dotenv
+# In .env (for quick test)
+FROM_EMAIL=guthulaavinash@gmail.com   # your own address
+```
+
+Then:
+
+1. Restart the server.  
+2. Wait for the scheduler (30 s) to trigger.  
+3. Look for the email in your Gmail inbox.
+
+**Once you confirm that works, switch back to a verified domain** as described in step 1.
+
+---
+
+### TL;DR
+
+- **Emails fail because Resend’s domain isn’t verified** and **Gmail tokens are invalid**.  
+- **Fix**: Verify a sending domain in Resend (or use your own address for testing) *and* have Pro/Agency users reconnect their Gmail accounts.  
+- **Optional**: Supply valid Gemini/Groq keys or rely on the static fallback template.  
+
+Let me know which of the above actions you’d like me to automate (e.g., update `.env`, add a helper endpoint, etc.) or if you need any further clarification.
