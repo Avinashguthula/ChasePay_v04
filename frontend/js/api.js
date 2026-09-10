@@ -1,4 +1,4 @@
-const BASE_API_URL = "http://localhost:8000/api";
+const BASE_API_URL = "https://chasepay.onrender.com/api";
 
 async function fetchWithAuth(endpoint, options = {}) {
     const token = localStorage.getItem('access_token');
