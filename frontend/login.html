@@ -136,7 +136,7 @@
         <div class="space-y-4 mb-6">
           <p class="text-xs font-mono text-center text-muted uppercase tracking-wider mb-2">Continue with</p>
           <div class="grid grid-cols-2 gap-4">
-            <a href="https://tangfbapazsvvnvajcqn.supabase.co/auth/v1/authorize?provider=github&redirect_to=https://chasepay-v04.onrender.com/login.html"
+            <a id="github-login" href="#"
               class="flex items-center justify-center gap-2 py-3 bg-bg border border-border rounded-xl text-sm font-semibold hover:bg-white hover:border-text transition-colors">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
@@ -145,7 +145,7 @@
               </svg>
               GitHub
             </a>
-            <a href="https://tangfbapazsvvnvajcqn.supabase.co/auth/v1/authorize?provider=google&redirect_to=https://chasepay-v04.onrender.com/login.html&prompt=select_account"
+            <a id="google-login" href="#"
               class="flex items-center justify-center gap-2 py-3 bg-bg border border-border rounded-xl text-sm font-semibold hover:bg-white hover:border-text transition-colors">
               <svg class="w-5 h-5" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -259,6 +259,17 @@
 
   <script src="js/auth.js"></script>
   <script>
+    const config = await window.getAppConfig();
+
+    const SUPABASE_URL = config.supabase_url;
+    const OAUTH_REDIRECT = `${window.location.origin}/login.html`;
+
+    document.getElementById('github-login').href =
+      `${SUPABASE_URL}/auth/v1/authorize?provider=github&redirect_to=${encodeURIComponent(OAUTH_REDIRECT)}`;
+
+    document.getElementById('google-login').href =
+      `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(OAUTH_REDIRECT)}&prompt=select_account`;
+
     function switchTab(tab) {
       const isLogin = tab === 'login';
       document.getElementById('tab-login').classList.toggle('hidden', !isLogin);
