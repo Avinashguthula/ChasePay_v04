@@ -39,6 +39,7 @@ async def get_public_config():
     return {
         "api_url": settings.API_URL,
         "frontend_url": settings.FRONTEND_URL,
+        "supabase_url": settings.SUPABASE_URL,
     }
 
 # Serve static files from the frontend directory
