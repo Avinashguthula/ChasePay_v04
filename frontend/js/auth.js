@@ -1,9 +1,12 @@
-const API_URL = "https://chasepay.onrender.com/api";
+// API_URL is resolved at runtime from the /api/config endpoint via config.js.
+// config.js must be loaded before this file.
 
 document.getElementById('login-btn')?.addEventListener('click', async () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const msg = document.getElementById('status-msg');
+    const config = await window.getAppConfig();
+    const API_URL = config.api_url;
 
     try {
         const response = await fetch(`${API_URL}/auth/login`, {
@@ -34,6 +37,8 @@ document.getElementById('signup-btn')?.addEventListener('click', async () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const msg = document.getElementById('status-msg');
+    const config = await window.getAppConfig();
+    const API_URL = config.api_url;
 
     try {
         const response = await fetch(`${API_URL}/auth/signup`, {

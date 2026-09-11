@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from backend.db.supabase import get_supabase_client, call_with_retry
+from backend.core.config import settings
 from pydantic import BaseModel
 
 from typing import Optional
@@ -59,7 +60,7 @@ async def reset_password(data: dict):
     try:
         print(f"DEBUG: Attempting password reset for {email}")
         call_with_retry(lambda: supabase.auth.reset_password_for_email(email, {
-            "redirect_to": "http://localhost:8000/update-password.html"
+            "redirect_to": f"{settings.FRONTEND_URL}/update-password.html"
         }))
         print("DEBUG: Password reset email sent successfully")
         return {"message": "Password reset email sent"}

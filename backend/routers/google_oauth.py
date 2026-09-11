@@ -57,7 +57,7 @@ async def google_callback(code: str, state: str):
     }).eq("id", user_id).execute()
     
     # Redirect back to frontend settings
-    return RedirectResponse(url="http://localhost:8000/settings?connected=true")
+    return RedirectResponse(url=f"{settings.FRONTEND_URL}/settings?connected=true")
 
 @router.post("/disconnect")
 async def google_disconnect(user: dict = Depends(get_current_user)):

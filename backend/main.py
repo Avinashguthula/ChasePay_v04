@@ -28,9 +28,18 @@ app.include_router(invoices.router, prefix="/api")
 app.include_router(clients.router, prefix="/api")
 app.include_router(payments.router, prefix="/api")
 app.include_router(google_oauth.router, prefix="/api")
+
 @app.get("/api/health")
 async def health_check():
     return {"status": "online"}
+
+@app.get("/api/config")
+async def get_public_config():
+    """Return only public (non-secret) configuration values needed by the browser."""
+    return {
+        "api_url": settings.API_URL,
+        "frontend_url": settings.FRONTEND_URL,
+    }
 
 # Serve static files from the frontend directory
 # We use a custom route to handle extension-less URLs like /dashboard

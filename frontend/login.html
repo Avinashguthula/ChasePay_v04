@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ChasePay — Sign in</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/config.js"></script>
   <script src="js/tailwind-config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
@@ -135,7 +136,7 @@
         <div class="space-y-4 mb-6">
           <p class="text-xs font-mono text-center text-muted uppercase tracking-wider mb-2">Continue with</p>
           <div class="grid grid-cols-2 gap-4">
-            <a href="https://tangfbapazsvvnvajcqn.supabase.co/auth/v1/authorize?provider=github&redirect_to=http://localhost:8000/login.html"
+            <a id="github-oauth-btn" href="#"
               class="flex items-center justify-center gap-2 py-3 bg-bg border border-border rounded-xl text-sm font-semibold hover:bg-white hover:border-text transition-colors">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
@@ -144,7 +145,7 @@
               </svg>
               GitHub
             </a>
-            <a href="https://tangfbapazsvvnvajcqn.supabase.co/auth/v1/authorize?provider=google&redirect_to=http://localhost:8000/login.html&prompt=select_account"
+            <a id="google-oauth-btn" href="#"
               class="flex items-center justify-center gap-2 py-3 bg-bg border border-border rounded-xl text-sm font-semibold hover:bg-white hover:border-text transition-colors">
               <svg class="w-5 h-5" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -164,6 +165,17 @@
             </a>
           </div>
         </div>
+        <script>
+          // Build OAuth URLs from runtime config so redirect_to is environment-correct
+          window.getAppConfig().then(function(cfg) {
+            var redirectTo = encodeURIComponent(cfg.frontend_url + '/login.html');
+            var supabaseBase = 'https://tangfbapazsvvnvajcqn.supabase.co/auth/v1/authorize';
+            document.getElementById('github-oauth-btn').href =
+              supabaseBase + '?provider=github&redirect_to=' + redirectTo;
+            document.getElementById('google-oauth-btn').href =
+              supabaseBase + '?provider=google&redirect_to=' + redirectTo + '&prompt=select_account';
+          });
+        </script>
 
         <div class="relative flex items-center justify-center mb-6">
           <hr class="w-full border-border">
@@ -300,7 +312,7 @@
       btn.disabled = true;
       btn.textContent = 'SIGNING IN...';
 
-      const API_URL = "http://localhost:8000/api";
+      const { api_url: API_URL } = await window.getAppConfig();
       try {
         const response = await fetch(`${API_URL}/auth/login`, {
           method: 'POST',
@@ -346,7 +358,7 @@
       btn.disabled = true;
       btn.textContent = 'CREATING...';
 
-      const API_URL = "http://localhost:8000/api";
+      const { api_url: API_URL } = await window.getAppConfig();
       try {
         const response = await fetch(`${API_URL}/auth/signup`, {
           method: 'POST',

@@ -1,4 +1,5 @@
-const BASE_API_URL = "https://chasepay.onrender.com/api";
+// BASE_API_URL is resolved at runtime from the /api/config endpoint via config.js.
+// config.js must be loaded before this file.
 
 async function fetchWithAuth(endpoint, options = {}) {
     const token = localStorage.getItem('access_token');
@@ -6,6 +7,9 @@ async function fetchWithAuth(endpoint, options = {}) {
         window.location.href = 'index.html';
         return null;
     }
+
+    const config = await window.getAppConfig();
+    const BASE_API_URL = config.api_url;
 
     const headers = {
         'Authorization': `Bearer ${token}`,
