@@ -264,11 +264,28 @@
     const SUPABASE_URL = config.supabase_url;
     const OAUTH_REDIRECT = `${window.location.origin}/login.html`;
 
-    document.getElementById('github-login').href =
-      `${SUPABASE_URL}/auth/v1/authorize?provider=github&redirect_to=${encodeURIComponent(OAUTH_REDIRECT)}`;
+    document.getElementById('google-login').addEventListener('click', function (e) {
+      e.preventDefault();
 
-    document.getElementById('google-login').href =
-      `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(OAUTH_REDIRECT)}&prompt=select_account`;
+      const url =
+        `${SUPABASE_URL}/auth/v1/authorize` +
+        `?provider=google` +
+        `&redirect_to=${encodeURIComponent(OAUTH_REDIRECT)}` +
+        `&prompt=select_account`;
+
+      window.location.href = url;
+    });
+
+    document.getElementById('github-login').addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const url =
+        `${SUPABASE_URL}/auth/v1/authorize` +
+        `?provider=github` +
+        `&redirect_to=${encodeURIComponent(OAUTH_REDIRECT)}`;
+
+      window.location.href = url;
+    });
 
     function switchTab(tab) {
       const isLogin = tab === 'login';
