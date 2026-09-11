@@ -12,6 +12,7 @@
     window.APP_CONFIG = window.APP_CONFIG || {
         api_url: defaultOrigin + '/api',
         frontend_url: defaultOrigin,
+        supabase_url: '',
         isLoaded: false
     };
 
@@ -30,6 +31,7 @@
                 .then(function (data) {
                     if (data.api_url) window.APP_CONFIG.api_url = data.api_url;
                     if (data.frontend_url) window.APP_CONFIG.frontend_url = data.frontend_url;
+                    if (data.supabase_url) window.APP_CONFIG.supabase_url = data.supabase_url;
                     window.APP_CONFIG.isLoaded = true;
                     return window.APP_CONFIG;
                 })
